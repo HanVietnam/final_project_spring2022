@@ -1,0 +1,83 @@
+---
+title: "final_project_censusdata"
+output: html_notebook
+---
+
+```{r}
+library(tidycensus)
+library(tidyverse)
+```
+
+#Variables
+```{r}
+vars_2020 <- load_variables(2020, "acs5", cache = FALSE)
+```
+
+
+
+
+#Poverty rate
+```{r}
+#Missouri's cities poverty rate in 2020: to see where Columbia is
+
+#B17010_002: Estimate!!Total:!!Income in the past 12 months below poverty level (Concept: POVERTY STATUS IN THE PAST 12 MONTHS OF FAMILIES BY FAMILY TYPE BY PRESENCE OF RELATED CHILDREN UNDER 18 YEARS BY AGE OF RELATED CHILDREN)
+
+#B17010_001: Estimate!!Total: (Concept: POVERTY STATUS IN THE PAST 12 MONTHS OF FAMILIES BY FAMILY TYPE BY PRESENCE OF RELATED CHILDREN UNDER 18 YEARS BY AGE OF RELATED CHILDREN)
+
+mo_poverty <- get_acs(
+  geography = "place",
+  variables = c(poverty_num = "B17010_002",
+                poverty_denom = "B17010_001"),
+  state = "MO",
+  year = 2020,
+  output = "wide"
+) %>% filter(grepl("city", NAME)) %>% 
+  mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
+  arrange(desc(percent))
+
+#Columbia is 405/642 what so called "city" in Missouri with the poverty percent is 8.5%
+```
+
+#Let's see how poverty percent of Columbia has changed the last decade
+```{r}
+years <- c(2010:2020)
+
+mo_decade_poverty <- map_dfr(years, function(year) {
+  get_acs(
+    geography = "place",
+    variables = c(poverty_num = "B17010_002",
+                poverty_denom = "B17010_001"),
+    state = "MO",
+    year = year,
+    output = "wide"
+  ) %>%  mutate(year = year) %>% 
+    filter(grepl("city", NAME)) %>% 
+    mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
+  arrange(desc(percent))
+})
+
+#Columbia decade poverty rate
+
+columbia_decade_poverty <- mo_decade_poverty %>% filter(grepl("Columbia", NAME))
+
+```
+
+
+
+
+```{r}
+#I think it makes sense more if compare Columbia to Missouri's Cosmopolitan Area
+mo_cbsa_poverty <- get_acs(
+    geography = "cbsa",
+    variables = c(poverty_num = "B17010_002",
+                  poverty_denom = "B17010_001"),
+    year = 2020, 
+    output = "wide"
+  ) %>% 
+  filter(grepl("MO", NAME) & grepl("Metro Area", NAME)) %>% 
+  mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
+  arrange(desc(percent))
+  
+#Columbia ranked 5/8 of Missouri's Metro Area with 7.68% of poverty
+```
+
