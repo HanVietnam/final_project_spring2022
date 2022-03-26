@@ -6,14 +6,262 @@ output: html_notebook
 ```{r}
 library(tidycensus)
 library(tidyverse)
+library(ggplot2)
 ```
 
 #Variables
 ```{r}
 vars_2020 <- load_variables(2020, "acs5", cache = FALSE)
+vars_2015 <- load_variables(2015, "acs5", cache = FALSE)
+vars_2010 <- load_variables(2010, "acs5", cache = FALSE)
+```
+
+```{r}
+profile_2020 <- load_variables(2020, "acs5/profile")
+profile_2019 <- load_variables(2019, "acs5/profile")
+profile_2018 <- load_variables(2018, "acs5/profile")
+profile_2016 <- load_variables(2016, "acs5/profile")
+profile_2015 <- load_variables(2015, "acs5/profile")
+profile_2010 <- load_variables(2010, "acs5/profile")
+```
+
+#compare profile
+```{r}
+compare_profile_2020 <- load_variables(2020, "acs5/cprofile")
+compare_profile_2015 <- load_variables(2015, "acs5/cprofile")
+```
+
+#Median age
+```{r}
+years <- c(2010:2020)
+
+median_age <- map_dfr(years, function(year) {
+  get_acs(
+  geography = "place",
+  variables = c(median_age = "B01002_001"),
+  state = "MO",
+  year = year) %>% 
+    mutate(year = year) 
+})
+
+#How to drop Lake St. Louis city?
+median_age %>% filter(grepl("St. Louis", NAME) | grepl("Columbia", NAME) | grepl("Kansas", NAME) | grepl("Lee's", NAME) | grepl("Independence", NAME) | grepl("Springfield", NAME) | grepl("O'Fallon", NAME))
+
+#Columbia median age 2010:2020
+columbia_median_age <- median_age %>% filter(grepl("Columbia", NAME))
+
+write_csv(columbia_median_age, "data/columbia_median_age.csv")
+```
+
+#Columbia population pyramid
+
+```{r}
+subject_2010 <- load_variables(2010, "acs5/subject")
 ```
 
 
+```{r}
+cohort_names <- c("0-4", "5-9", "10-14", "15-19",
+                  "20-24", "25-29", "30-34", "35-39",
+                  "40-44", "45-49", "50-54", "55-59",
+                  "60-64", "65-69", "70-74", "75-79",
+                  "80-84", "85+")
+
+female_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C03_0", .) %>%
+  set_names(cohort_names)
+
+male_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C02_0", .) %>%
+  set_names(cohort_names)
+
+```
+
+```{r}
+#2010
+male_data_2010 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = male_vars,
+  year = 2010
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Male",
+         estimate = estimate * -1)
+
+
+female_data_2010 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = female_vars,
+  year = 2010
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Female")
+
+pyramid_2010 <- bind_rows(male_data_2010, female_data_2010)%>%
+  mutate(variable = factor(variable, levels = cohort_names))
+```
+
+```{r}
+ggplot(pyramid_2010, 
+       aes(x = estimate, 
+           y = variable, 
+           fill = sex)) + 
+  geom_col(width = 0.95, alpha = 0.75) + 
+  theme_minimal(base_size = 16) + 
+  scale_x_continuous(labels = function(x) paste0(abs(x / 1000), "k")) + 
+  scale_fill_manual(values = c("#000000", "#F1B82D")) + 
+  labs(x = "", 
+       y = "ACS estimate", 
+       title = "2010 Population structure in Columbia, Missouri", 
+       fill = "", 
+       caption = "Data source: 2006-2010 ACS & tidycensus R package")
+```
+
+```{r}
+#2015
+
+subject_2015 <- load_variables(2015, "acs5/subject")
+
+cohort_names <- c("0-4", "5-9", "10-14", "15-19",
+                  "20-24", "25-29", "30-34", "35-39",
+                  "40-44", "45-49", "50-54", "55-59",
+                  "60-64", "65-69", "70-74", "75-79",
+                  "80-84", "85+")
+
+female_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C03_0", .) %>%
+  set_names(cohort_names)
+
+male_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C02_0", .) %>%
+  set_names(cohort_names)
+
+male_data_2015 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = male_vars,
+  year = 2015
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Male",
+         estimate = estimate * -1)
+
+
+female_data_2015 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = female_vars,
+  year = 2015
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Female")
+
+pyramid_2015 <- bind_rows(male_data_2015, female_data_2015)%>%
+  mutate(variable = factor(variable, levels = cohort_names))
+
+```
+
+```{r}
+ggplot(pyramid_2015, 
+       aes(x = estimate, 
+           y = variable, 
+           fill = sex)) + 
+  geom_col(width = 0.95, alpha = 0.75) + 
+  theme_minimal(base_size = 16) + 
+  scale_x_continuous(labels = function(x) paste0(abs(x / 1000), "k")) + 
+  scale_fill_manual(values = c("#000000", "#F1B82D")) + 
+  labs(x = "", 
+       y = "ACS estimate", 
+       title = "2015 Population structure in Columbia, Missouri", 
+       fill = "", 
+       caption = "Data source: 2011-2015 ACS & tidycensus R package")
+```
+```{r}
+#2020
+
+subject_2020 <- load_variables(2020, "acs5/subject")
+
+cohort_names <- c("0-4", "5-9", "10-14", "15-19",
+                  "20-24", "25-29", "30-34", "35-39",
+                  "40-44", "45-49", "50-54", "55-59",
+                  "60-64", "65-69", "70-74", "75-79",
+                  "80-84", "85+")
+
+male_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C03_0", .) %>%
+  set_names(cohort_names)
+
+female_vars <- 2:19 %>%
+  str_pad(2, "left", "0") %>%
+  paste0("S0101_C05_0", .) %>%
+  set_names(cohort_names)
+
+male_data_2020 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = male_vars,
+  year = 2020
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Male",
+         estimate = estimate * -1)
+
+
+female_data_2020 <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = female_vars,
+  year = 2020
+) %>% filter(grepl("Columbia", NAME)) %>% 
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+  mutate(sex = "Female")
+
+pyramid_2020 <- bind_rows(male_data_2020, female_data_2020)%>%
+  mutate(variable = factor(variable, levels = cohort_names))
+
+```
+
+```{r}
+ggplot(pyramid_2020, 
+       aes(x = estimate, 
+           y = variable, 
+           fill = sex)) + 
+  geom_col(width = 0.95, alpha = 0.75) + 
+  theme_minimal(base_size = 16) + 
+  scale_x_continuous(labels = function(x) paste0(abs(x / 1000), "k")) + 
+  scale_fill_manual(values = c("#000000", "#F1B82D")) + 
+  labs(x = "", 
+       y = "ACS estimate", 
+       title = "2020 Population structure in Columbia, Missouri", 
+       fill = "", 
+       caption = "Data source: 2016-2020 ACS & tidycensus R package")
+```
+
+
+#Median income
+```{r}
+years <- c(2010:2020)
+
+median_income <- map_dfr(years, function(year) {
+  get_acs(
+  geography = "place",
+  variables = c(median_income = "B19013_001"),
+  state = "MO",
+  year = year) %>% 
+    mutate(year = year)
+})
+  
+columbia_median_income <- median_income %>% filter(grepl("Columbia", NAME))
+
+write_csv(columbia_median_income, "data/columbia_median_income.csv")
+```
 
 
 #Poverty rate
@@ -35,7 +283,10 @@ mo_poverty <- get_acs(
   mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
   arrange(desc(percent))
 
-#Columbia is 405/642 what so called "city" in Missouri with the poverty percent is 8.5%
+#Because there are alot of small cities, I'll filter places where poverty_denomE is bigger than 20,000
+mo_bigcity_poverty_2020 <- mo_poverty %>% filter(poverty_denomE > 20000)
+
+#Columbia is 3/8 among big cities in Missouri in term of lowest poverty percent (8.5%)
 ```
 
 #Let's see how poverty percent of Columbia has changed the last decade
@@ -56,13 +307,40 @@ mo_decade_poverty <- map_dfr(years, function(year) {
   arrange(desc(percent))
 })
 
-#Columbia decade poverty rate
+#Because there are alot of small cities, I'll filter places where poverty_denomE is bigger than 20,000
+mo_bigcity_poverty <- mo_decade_poverty %>% filter(poverty_denomE > 20000)
 
+
+#Columbia decade poverty rate
 columbia_decade_poverty <- mo_decade_poverty %>% filter(grepl("Columbia", NAME))
+
+write_csv(columbia_decade_poverty, "data/columbia_decade_poverty.csv")
+#Good news: The poverty percent has declined year by year, hit the lowest in 2020
 
 ```
 
+#Let see Columbia's poverty ranking year to year
+```{r}
+#How to do a loop here?
 
+mo_bigcity_poverty %>% select(NAME, year, percent) %>% 
+  pivot_wider(names_from = year, values_from = percent)
+
+#2010
+mo_bigcity_poverty %>% filter(year == 2010) %>% 
+  arrange(percent)
+#Ranked 2nd lowest poverty percent among 8 big cities with 11%
+
+#2011
+mo_bigcity_poverty %>% filter(year == 2011) %>% 
+  arrange(percent)
+
+#Ranked 3rd, 10.4%
+
+#2012
+mo_bigcity_poverty %>% filter(year == 2012) %>% 
+  arrange(percent)
+```
 
 
 ```{r}
@@ -79,5 +357,72 @@ mo_cbsa_poverty <- get_acs(
   arrange(desc(percent))
   
 #Columbia ranked 5/8 of Missouri's Metro Area with 7.68% of poverty
+```
+
+```{r}
+years <- c(2010:2020)
+
+cbsa_10year_poverty <- map_dfr(years, function(year) {
+  get_acs(
+    geography = "cbsa",
+    variables = c(poverty_num = "B17010_002",
+                  poverty_denom = "B17010_001"),
+    year = year,
+    output = "wide"
+  ) %>% 
+  mutate(year = year)
+}) 
+
+cbsa_10year_poverty %>% filter(grepl("MO", NAME) & grepl("Metro Area", NAME)) %>% 
+  mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
+  select(NAME, year, percent) %>% 
+  pivot_wider(names_from = year, values_from = percent)
+```
+# Education
+```{r}
+#CP02PR_2015_068: 2011-2015 Estimates!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher (from compare_profile_2020)
+#No data available?
+get_acs(
+  geography = "county",
+  table = "CP02PR_2015",
+  state = "MO",
+  year = 2020
+)
+```
+#Note for education: Inconsistent variables (refer to profile series)
+2010-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+            DP02_0067P: Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+
+2019-2020: DP02_0068: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+           DP02_0068P:Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+
+```{r}
+years <- c(2010:2018)
+
+education1 <- map_dfr(years, function(year) {
+  get_acs(
+    geography = "place",
+    variables = c(percent = "DP02_0067P"),
+    state = "MO",
+    year = year
+  ) %>% mutate(year = year)
+})
+
+columbia_education1 <- education1 %>% filter(grepl("Columbia", NAME))
+
+year1 <- c(2019:2020)
+
+education2 <- map_dfr(year1, function(year) {
+  get_acs(
+    geography = "place",
+    variables = c(percent = "DP02_0068P"),
+    state = "MO",
+    year = year
+  ) %>% mutate(year = year)
+})
+
+columbia_education2 <- education2 %>% filter(grepl("Columbia", NAME))
+
+columbia_education <- bind_rows(columbia_education1, columbia_education2)
 ```
 
