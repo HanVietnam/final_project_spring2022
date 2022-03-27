@@ -119,6 +119,13 @@ ggplot(pyramid_2010,
        title = "2010 Population structure in Columbia, Missouri", 
        fill = "", 
        caption = "Data source: 2006-2010 ACS & tidycensus R package")
+
+ggsave(filename = "pyramid2010.png",
+       path = "maps",
+       width = 8,
+       height = 5,
+       units = "in",
+       dpi = 300)
 ```
 
 ```{r}
@@ -181,7 +188,18 @@ ggplot(pyramid_2015,
        title = "2015 Population structure in Columbia, Missouri", 
        fill = "", 
        caption = "Data source: 2011-2015 ACS & tidycensus R package")
+
+
+ggsave(filename = "columbia_pyramid_2015.png",
+       path = "maps",
+       width = 8,
+       height = 5,
+       units = "in",
+       dpi = 300)
+
 ```
+
+
 ```{r}
 #2020
 
@@ -242,6 +260,14 @@ ggplot(pyramid_2020,
        title = "2020 Population structure in Columbia, Missouri", 
        fill = "", 
        caption = "Data source: 2016-2020 ACS & tidycensus R package")
+
+
+ggsave(filename = "columbia_pyramid_2020.png",
+       path = "maps",
+       width = 8,
+       height = 5,
+       units = "in",
+       dpi = 300)
 ```
 
 
@@ -424,5 +450,27 @@ education2 <- map_dfr(year1, function(year) {
 columbia_education2 <- education2 %>% filter(grepl("Columbia", NAME))
 
 columbia_education <- bind_rows(columbia_education1, columbia_education2)
+
+write_csv(columbia_education, "data/columbia_education.csv")
+```
+
+#Unemployment
+```{r}
+#DP03_0009P: Percent!!EMPLOYMENT STATUS!!Civilian labor force!!Unemployment Rate
+
+years <- c(2010:2020)
+
+unemployment <- map_dfr(years, function(year) {
+  get_acs(
+    geography = "place",
+    variables = c(unemployment_rate = "DP03_0009P"),
+    state = "MO",
+    year = year
+  ) %>% mutate(year = year)
+})
+
+columbia_unemployment <- unemployment %>% filter(grepl("Columbia", NAME))
+
+write_csv(columbia_unemployment, "data/columbia_unemployment.csv")
 ```
 
