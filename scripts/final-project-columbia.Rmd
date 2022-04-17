@@ -23,8 +23,6 @@ all_property <- read_csv("data/all_property_crime.csv")
 all_violence <- read_csv("data/all_violent.csv")
 ```
 
-
-
 #Variables
 ```{r}
 vars_2020 <- load_variables(2020, "acs5", cache = FALSE)
@@ -68,7 +66,6 @@ columbia_median_age <- median_age %>% filter(grepl("Columbia", NAME))
 
 write_csv(columbia_median_age, "data/columbia_median_age.csv")
 
-ggplot(columbia_median_age, aes(x = ))
 ```
 
 #Columbia population pyramid
@@ -121,6 +118,8 @@ female_data_2010 <- get_acs(
 
 pyramid_2010 <- bind_rows(male_data_2010, female_data_2010)%>%
   mutate(variable = factor(variable, levels = cohort_names))
+
+write_csv(pyramid_2010, "data/pyramid_2010.csv")
 ```
 
 ```{r}
@@ -189,6 +188,8 @@ female_data_2015 <- get_acs(
 
 pyramid_2015 <- bind_rows(male_data_2015, female_data_2015)%>%
   mutate(variable = factor(variable, levels = cohort_names))
+
+write_csv(pyramid_2015, "data/pyramid_2015.csv")
 
 ```
 
@@ -261,6 +262,8 @@ female_data_2020 <- get_acs(
 
 pyramid_2020 <- bind_rows(male_data_2020, female_data_2020)%>%
   mutate(variable = factor(variable, levels = cohort_names))
+
+write_csv(pyramid_2020, "data/pyramid_2020.csv")
 
 ```
 
@@ -534,6 +537,14 @@ mo_counties_median_age %>% ggplot(
        caption = "Data source: 2020 5-year ACS, US Census Bureau",
        fill = "ACS estimate") +
   theme_void()
+
+ggsave(filename = "missouri_median_age.png",
+       path = "maps",
+       width = 8,
+       height = 5,
+       units = "in",
+       dpi = 300)
+
 ```
 #MO top 20 counties with highest income
 ```{r}

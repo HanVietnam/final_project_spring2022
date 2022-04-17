@@ -1,0 +1,99 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+#Data from ipums: https://www.nhgis.org/
+
+#1970
+```{r}
+census1970 <- read_csv("data/data1970/nhgis0002_ds98_1970_place.csv")
+census1970_nominal <- read_csv("data/Ipums_data/nhgis0002_csv/nhgis0002_ts_nominal_place.csv")
+
+census1970_nominal_codebook <- read_csv("data/Ipums_data/nhgis0002_csv/nhgis0002_ts_nominal_place_codebook.txt")
+
+census1970_02 <- read_csv("data/Ipums_data/nhgis0005_csv/nhgis0005_ds94_1970_place.csv")
+
+census1970_03 <- read_csv("data/Ipums_data/nhgis0005_csv/nhgis0005_ds95_1970_place.csv")
+
+census1970_04 <- read_csv("data/Ipums_data/nhgis0006_csv/nhgis0006_ds98_1970_place.csv")
+
+census1970_05 <- read_csv("data/Ipums_data/nhgis0006_csv/nhgis0006_ds99_1970_place.csv")
+
+census1970_06 <- read_csv("data/Ipums_data/nhgis0007_csv/nhgis0007_ds98_1970_place.csv")
+
+census1970_07 <- read_csv("data/Ipums_data/nhgis0007_csv/nhgis0007_ds99_1970_place.csv")
+
+census1970 %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE))
+```
+
+
+#1980
+```{r}
+census1910 <- read_csv("data/Ipums_data/nhgis0001_csv/nhgis0001_ds40_1910_tract.csv")
+
+census_1980 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds104_1980_place.csv")
+
+census_1980_02 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds105_1980_place.csv")
+
+census_1980_03 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds106_1980_place.csv")
+
+census_1980_04 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds107_1980_place.csv")
+
+census_1980_05 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds110_1980_place.csv")
+
+census_1980_06 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds111_1980_place.csv")
+
+census_1980_07 <- read_csv("data/Ipums_data/nhgis0008_csv/nhgis0008_ds104_1980_place.csv")
+
+census_1980_08_nominal <- read_csv("data/Ipums_data/nhgis0008_csv/nhgis0008_ts_nominal_place.csv")
+
+census_1980_09 <- read_csv("data/Ipums_data/nhgis0009_csv/nhgis0009_ds107_1980_place.csv")
+
+census_1980_nimonal <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ts_nominal_place.csv")
+
+census_1980_09_nominal <- read_csv("data/Ipums_data/nhgis0009_csv/nhgis0009_ts_nominal_place.csv")
+
+census_1980_10 <- read_csv("data/Ipums_data/nhgis0010_csv/nhgis0010_ds107_1980_place.csv")
+
+census_1980_10_nominal <- read_csv("data/Ipums_data/nhgis0010_csv/nhgis0010_ts_nominal_place.csv")
+```
+
+#1990
+```{r}
+census_1990_01 <- read_csv("data/Ipums_data/nhgis0011_csv/nhgis0011_ds120_1990_place.csv")
+
+census_1990_02 <- read_csv("data/Ipums_data/nhgis0011_csv/nhgis0011_ds123_1990_place.csv")
+
+census_1990_01_nominal <- read_csv("data/Ipums_data/nhgis0011_csv/nhgis0011_ts_nominal_place.csv")
+
+census_1990_03 <- read_csv("data/Ipums_data/nhgis0012_csv/nhgis0012_ds123_1990_place.csv")
+
+census_1990_03_nominal <- read_csv("data/Ipums_data/nhgis0012_csv/nhgis0012_ts_nominal_place.csv")
+
+census_1990_03 <- read_csv("data/Ipums_data/nhgis0013_csv/nhgis0013_ds123_1990_place.csv")
+
+census_1990_04_nominal <- read_csv("data/Ipums_data/nhgis0013_csv/nhgis0013_ts_nominal_place.csv")
+```
+
+#2000
+```{r}
+census_2000_01 <- read_csv("data/Ipums_data/nhgis0014_csv/nhgis0014_ds146_2000_place.csv")
+
+census_2000_01_nominal <- read_csv("data/Ipums_data/nhgis0014_csv/nhgis0014_ts_nominal_place.csv")
+
+census_2000_02 <- read_csv("data/Ipums_data/nhgis0015_csv/nhgis0015_ds151_2000_place.csv")
+
+census_2000_02_nominal <- read_csv("data/Ipums_data/nhgis0015_csv/nhgis0015_ts_nominal_place.csv")
+
+census_2000_03 <- read_csv("data/Ipums_data/nhgis0016_csv/nhgis0016_ds151_2000_place.csv")
+
+census_2000_03_nominal <- read_csv("data/Ipums_data/nhgis0016_csv/nhgis0016_ts_nominal_place.csv")
+
+```
+
+
