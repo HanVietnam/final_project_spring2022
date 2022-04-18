@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+Data source: https://data2.nhgis.org/downloads
+```{r}
+#Income
+income <- read_csv("data/Time_series_data/nhgis0017_csv/nhgis0017_ts_nominal_place.csv")
+income_doc <- read_csv("data/Time_series_data/nhgis0017_csv/nhgis0017_ts_nominal_place_codebook.txt")
+
+#Population
+population <- read_csv("data/Time_series_data/nhgis0018_csv/nhgis0018_ts_nominal_place.csv")
+
+pop_doc <- read_csv("data/Time_series_data/nhgis0018_csv/nhgis0018_ts_nominal_place_codebook.txt")
+
+#Race
+race <- read_csv("data/Time_series_data/nhgis0019_csv/nhgis0019_ts_nominal_place.csv")
+race_doc <- read_csv("data/Time_series_data/nhgis0019_csv/nhgis0019_ts_nominal_place_codebook.txt")
+
+#Education Attainment
+edu <- read_csv("data/Time_series_data/nhgis0020_csv/nhgis0020_ts_nominal_place.csv")
+
+edu_doc <- read_csv("data/Time_series_data/nhgis0020_csv/nhgis0020_ts_nominal_place_codebook.txt")
+
+#Labor
+labor <- read_csv("data/Time_series_data/nhgis0021_csv/nhgis0021_ts_nominal_place.csv")
+labor_doc <- read_csv("data/Time_series_data/nhgis0021_csv/nhgis0021_ts_nominal_place_codebook.txt")
+
+```
+
+```{r}
+#Poverty number is the number of person has below poverty income. Have to calculate rate per 100.000 people.
+#Median income doesn't exist before 1980
+columbia_in <- income %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  rename(median_in_1980 = B79AA1980, median_in_1990 = B79AA1990, median_in_2000 = B79AA2000, poverty_1970 = CL6AA1970, poverty_1980 = CL6AA1980, poverty_1990 = CL6AA1990, poverty_2000 = CL6AA2000) %>% 
+  select(PLACE, median_in_1980, median_in_1990, median_in_1990, median_in_2000, poverty_1970, poverty_1980, poverty_1990, poverty_2000)
+  
+```
+
+#Population
+```{r}
+#Can build population pyramid by this data 
+columbia_pop <- population %>%  filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  select("PLACE", "AV0AA1970", "AV0AA1980", "AV0AA1990", "AV0AA2000", "AV0AA2010", "AV0AA2020") %>% 
+ rename(pop1970 = AV0AA1970, pop1980 = AV0AA1980, pop1990 = AV0AA1990, pop2000 = AV0AA2000, pop2010 = AV0AA2010, pop2020 = AV0AA2020)
+```
+
+#Race
+```{r}
+columbia_race <- race %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  rename(white_1970 = B18AA1970, white_1980 = B18AA1980, white_1990 = B18AA1990, white_2000 = B18AA2000, white_2010 = B18AA2010, white_2020 = B18AA2020, black_1970 = B18AB1970, black_1980 = B18AB1980, black_1990 = B18AB1990, black_2000 = B18AB2000, black_2010 = B18AB2010, black_2020 = B18AB2020, indian_native_1970 = B18AC1970, indian_native_1980 = B18AC1980, indian_native_1990 = B18AC1990, indian_native_2000 = B18AC2000, indian_native_2010 = B18AC2010, indian_native_2020 = B18AC2020, asian_pacific_1970 = B18AD1970, asian_pacific_1980 = B18AD1980, asian_pacific_1990 = B18AD1990, asian_pacific_2000 = B18AD2000, asian_pacific_2010 = B18AD2010, asian_pacific_2020 = B18AD2020) %>% 
+  select(PLACE, white_1970, white_1980, white_1990, white_2000, white_2010, white_2020, black_1970, black_1980, black_1990, black_2000, black_2010, black_2020, indian_native_1970, indian_native_1980, indian_native_1990, indian_native_2000, indian_native_2010, indian_native_2020, asian_pacific_1970, asian_pacific_1980, asian_pacific_1990, asian_pacific_2000, asian_pacific_2010, asian_pacific_2020) %>% 
+  
+```
+
+#edu
+```{r}
+#bachelor degree or higher
+#mutate population to calculate rate
+columbia_edu <- edu %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  rename(bachelor_1970 = B69AC1970, bachelor_1980 = B69AC1980, bachelor_1990 = B69AC1990, bachelor_2000 = B69AC2000) %>% 
+  select(PLACE, bachelor_1970, bachelor_1980, bachelor_1990, bachelor_2000)
+```
+
+#Labor force
+```{r}
+#Unemployed people 16 years and over
+#Mutate population to calculate rate
+columbia_labor <- labor %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  rename(unemployed_1970 = B84AF1970, unemployed_1980 = B84AF1980, unemployed_1990 = B84AF1990, unemployed_2000 = B84AF2000) %>% 
+  select(PLACE, unemployed_1970, unemployed_1980, unemployed_1990, unemployed_2000)
+```
+
