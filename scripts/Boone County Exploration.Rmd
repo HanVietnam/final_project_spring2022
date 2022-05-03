@@ -2,7 +2,21 @@
 title: "Boone County Exploration"
 output: html_notebook
 ---
+
 #It's much easier to examine Boone County since the census data is more precise and tidycensus package is very well supported this geograpy level. I just try something to practice R skills. 
+
+```{r}
+library(tidycensus)
+library(tidyverse)
+library(ggplot2)
+library(tigris)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggiraph)
+library(patchwork)
+library(shiny)
+```
 
 #MO median_age by counties
 ```{r}
@@ -195,10 +209,6 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-# go back to 1950 - 2000
-```{r}
-
-```
 
 ```{r}
 mo_race_income <- get_acs(
