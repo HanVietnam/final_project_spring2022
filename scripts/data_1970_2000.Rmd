@@ -5,20 +5,38 @@ output: html_notebook
 
 ```{r}
 library(tidyverse)
+library(dplyr)
+library(tidycensus)
 ```
 
 #Data from ipums: https://www.nhgis.org/
 
 #1970
 ```{r}
+
 census1970 <- read_csv("data/data1970/nhgis0002_ds98_1970_place.csv")
+
+
+#Geographic integration: Nominal; Tables: 1. Total Population Years: 1970, 1980, 1990, 2000, 2010, 2008-2012, 2015-2019, 2020
 census1970_nominal <- read_csv("data/Ipums_data/nhgis0002_csv/nhgis0002_ts_nominal_place.csv")
+
 
 census1970_nominal_codebook <- read_csv("data/Ipums_data/nhgis0002_csv/nhgis0002_ts_nominal_place_codebook.txt")
 
+#Table: 1. Sex by Age and 2. Race
 census1970_02 <- read_csv("data/Ipums_data/nhgis0005_csv/nhgis0005_ds94_1970_place.csv")
 
+#Table: 1. Sex by Race 2. Sex by Age 3. Household Relationship 4. Sex by Age by Marital Status
 census1970_03 <- read_csv("data/Ipums_data/nhgis0005_csv/nhgis0005_ds95_1970_place.csv")
+
+# Tables:1. Persons by Age [2]: Children and Adults 2. Persons by Race [5*] 3. Persons by Detailed Race [10*] 4.Persons by Sex [2] by Race [5*] 5Total Households
+census1970_02_nominal <- read_csv("data/Ipums_data/nhgis0005_csv/nhgis0005_ts_nominal_place.csv")
+
+#1. Persons 25 Years and Over by Educational Attainment [3]
+census1970_03_nominal <- read_csv("data/Ipums_data/nhgis0006_csv/nhgis0006_ts_nominal_place.csv")
+
+#Persons 16 Years and Over by Labor Force and Employment Status and poverty
+census1970_04_nominal <- read_csv("data/Ipums_data/nhgis0007_csv/nhgis0007_ts_nominal_place.csv")
 
 census1970_04 <- read_csv("data/Ipums_data/nhgis0006_csv/nhgis0006_ds98_1970_place.csv")
 
@@ -28,13 +46,12 @@ census1970_06 <- read_csv("data/Ipums_data/nhgis0007_csv/nhgis0007_ds98_1970_pla
 
 census1970_07 <- read_csv("data/Ipums_data/nhgis0007_csv/nhgis0007_ds99_1970_place.csv")
 
-census1970 %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE))
+
 ```
 
 
 #1980
 ```{r}
-census1910 <- read_csv("data/Ipums_data/nhgis0001_csv/nhgis0001_ds40_1910_tract.csv")
 
 census_1980 <- read_csv("data/Ipums_data/nhgis0003_csv/nhgis0003_ds104_1980_place.csv")
 
@@ -96,4 +113,31 @@ census_2000_03_nominal <- read_csv("data/Ipums_data/nhgis0016_csv/nhgis0016_ts_n
 
 ```
 
+#DATA MANIPULATION
+#1970
+```{r}
+#Total population: 58804
+census1970 %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE))
+
+```
+```{r}
+#Population 1970 - 2020
+pop1970_2020 <- census1970_nominal %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  select("PLACE", "AV0AA1970", "AV0AA1980", "AV0AA1990", "AV0AA2000", "AV0AA2010", "AV0AA2020") %>% 
+ rename(pop1970 = AV0AA1970, pop1980 = AV0AA1980, pop1990 = AV0AA1990, pop2000 = AV0AA2000, pop2010 = AV0AA2010, pop2020 = AV0AA2020)
+```
+
+```{r}
+#Table 1. Sex by Age and 2. Race
+#Population Pyramid, if have interest
+census1970_02 %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
+  pivot_longer(cols = 20:41, names_to = "male", values_to = "male_age")
+```
+
+```{r}
+census1970_02_nominal %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE))
+```
+```{r}
+
+```
 

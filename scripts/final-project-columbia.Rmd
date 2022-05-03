@@ -2,6 +2,10 @@
 title: "final_project_censusdata"
 output: html_notebook
 ---
+#Use tidycensus package to pull data from US Census Bureau to see how City of Columbia has changed over the past decade (2011 - 2020) 
+# Source: Kyle Walker's tidycensus: https://github.com/walkerke/tidycensus and his book: https://walker-data.com/census-r/. I can still have a lot of things to learn from this guy and the book. 
+#Special thanks to Liz Lucas who has introduced me to R and MaryJo Webster who has introduced me to Kyle Walker.
+
 
 ```{r}
 library(tidycensus)
@@ -16,20 +20,16 @@ library(patchwork)
 library(shiny)
 ```
 
-#import crime data
-#Link source: https://crime-data-explorer.app.cloud.gov/pages/explorer/crime/crime-trend
+# Load Variables to refer
 ```{r}
-all_property <- read_csv("data/all_property_crime.csv")
-all_violence <- read_csv("data/all_violent.csv")
-```
-
-#Variables
-```{r}
-vars_2020 <- load_variables(2020, "acs5", cache = FALSE)
+vars_2020 <- load_variables(2020, "acs5", cache = FALSE) #American Comunity Survey 5 years variable
 vars_2015 <- load_variables(2015, "acs5", cache = FALSE)
 vars_2010 <- load_variables(2010, "acs5", cache = FALSE)
+
+den_2010 <- load_variables(2010, "pl", cache = FALSE) #decenial variables 2010
 ```
 
+#Load profile variables
 ```{r}
 profile_2020 <- load_variables(2020, "acs5/profile")
 profile_2019 <- load_variables(2019, "acs5/profile")
@@ -39,15 +39,43 @@ profile_2015 <- load_variables(2015, "acs5/profile")
 profile_2010 <- load_variables(2010, "acs5/profile")
 ```
 
-#compare profile
+#compare profile variables (new function of tidycensus package)
 ```{r}
 compare_profile_2020 <- load_variables(2020, "acs5/cprofile")
 compare_profile_2015 <- load_variables(2015, "acs5/cprofile")
 ```
 
-#Median age
+#Total population 2011 - 2020. Geography = "place"
+#Variable: B01001_001 Estimate!!Total:
+
 ```{r}
-years <- c(2010:2020)
+years <- c(2011:2020)
+
+total_population <- map_dfr(years, function(year) {
+  get_acs(
+  geography = "place",
+  variables = c(total_population = "B01001_001"),
+  state = "MO",
+  year = year) %>% 
+    mutate(year = year) 
+}) %>% 
+  filter(grepl("Columbia", NAME))
+
+write_csv(total_population, "total_population.csv")
+
+#Columbia population ranking among cities in the U.S
+#Ranked: 238
+pop_rank <- get_acs(
+  geography = "place",
+  variables = "B01001_001",
+  year = 2020
+) %>% arrange(desc(estimate))
+```
+
+#Median age
+#Variable: B01002_001 Estimate!!Median age --!!Total:
+```{r}
+years <- c(2011:2020)
 
 median_age <- map_dfr(years, function(year) {
   get_acs(
@@ -58,24 +86,38 @@ median_age <- map_dfr(years, function(year) {
     mutate(year = year) 
 })
 
-#How to drop Lake St. Louis city?
-median_age %>% filter(grepl("St. Louis", NAME) | grepl("Columbia", NAME) | grepl("Kansas", NAME) | grepl("Lee's", NAME) | grepl("Independence", NAME) | grepl("Springfield", NAME) | grepl("O'Fallon", NAME))
-
-#Columbia median age 2010:2020
+#Columbia median age 2011:2020
 columbia_median_age <- median_age %>% filter(grepl("Columbia", NAME))
 
 write_csv(columbia_median_age, "data/columbia_median_age.csv")
 
+#Ranked 2203/31908 "places" in the State in 2020
+median_age_rank <- get_acs(
+  geography = "place",
+  variables = "B01002_001",
+  year = 2020
+) %>% arrange(estimate)
+
+#Ranked 83/1082 place of MO
+median_age_rank_mo <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = "B01002_001",
+  year = 2020
+) %>% arrange(estimate)
+
 ```
 
-#Columbia population pyramid
-
+#Columbia population pyramid 2010 - 2015 - 2020 to see how the population components have changed. 
+#Load subject variables
 ```{r}
 subject_2010 <- load_variables(2010, "acs5/subject")
 ```
 
 
 ```{r}
+#Variables S0101_C03_0xx are female variables with different age groups. 2:19 are the values to paste in xx position, as age groups
+
 cohort_names <- c("0-4", "5-9", "10-14", "15-19",
                   "20-24", "25-29", "30-34", "35-39",
                   "40-44", "45-49", "50-54", "55-59",
@@ -86,6 +128,8 @@ female_vars <- 2:19 %>%
   str_pad(2, "left", "0") %>%
   paste0("S0101_C03_0", .) %>%
   set_names(cohort_names)
+
+#Variables S0101_C02_0xx are male variables with different age groups
 
 male_vars <- 2:19 %>%
   str_pad(2, "left", "0") %>%
@@ -101,10 +145,10 @@ male_data_2010 <- get_acs(
   state = "MO",
   variables = male_vars,
   year = 2010
-) %>% filter(grepl("Columbia", NAME)) %>% 
-  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
+) %>% filter(grepl("Columbia", NAME)) %>% #Filter Columbia population
+  mutate(NAME = str_remove(NAME, " city, Missouri")) %>% #Remove unnecessary words to clean the data
   mutate(sex = "Male",
-         estimate = estimate * -1)
+         estimate = estimate * -1) #-1 to make male chart on the opposite side of female 
 
 
 female_data_2010 <- get_acs(
@@ -123,6 +167,7 @@ write_csv(pyramid_2010, "data/pyramid_2010.csv")
 ```
 
 ```{r}
+#Visualize it by ggplot2
 ggplot(pyramid_2010, 
        aes(x = estimate, 
            y = variable, 
@@ -130,14 +175,14 @@ ggplot(pyramid_2010,
   geom_col(width = 0.95, alpha = 0.75) + 
   theme_minimal(base_size = 16) + 
   scale_x_continuous(labels = function(x) paste0(abs(x / 1000), "k")) + 
-  scale_fill_manual(values = c("#000000", "#F1B82D")) + 
+  scale_fill_manual(values = c("#000000", "#F1B82D")) + #I choose Mizzou's colors
   labs(x = "", 
        y = "ACS estimate", 
        title = "2010 Population structure in Columbia, Missouri", 
        fill = "", 
-       caption = "Data source: 2006-2010 ACS & tidycensus R package")
+       caption = "Data source: 2006-2010 ACS & tidycensus R package") #Credit 
 
-ggsave(filename = "pyramid2010.png",
+ggsave(filename = "pyramid2010.png", #Save the pyramid
        path = "maps",
        width = 8,
        height = 5,
@@ -186,7 +231,7 @@ female_data_2015 <- get_acs(
   mutate(NAME = str_remove(NAME, " city, Missouri")) %>% 
   mutate(sex = "Female")
 
-pyramid_2015 <- bind_rows(male_data_2015, female_data_2015)%>%
+pyramid_2015 <- bind_rows(male_data_2015, female_data_2015)%>% #rbind the data 
   mutate(variable = factor(variable, levels = cohort_names))
 
 write_csv(pyramid_2015, "data/pyramid_2015.csv")
@@ -209,7 +254,7 @@ pop_pyramid_2015 <- ggplot(pyramid_2015,
        caption = "Data source: 2011-2015 ACS & tidycensus R package")
 
 
-ggsave(filename = "pop_pyramid_2015.png",
+ggsave(filename = "pop_pyramid_2015.png", # Save the pyramid
        path = "maps",
        width = 8,
        height = 5,
@@ -290,11 +335,12 @@ ggsave(filename = "columbia_pyramid_2020.png",
        units = "in",
        dpi = 300)
 ```
-
+#Columbia population is getting slightly older, but it hasn't changed much the last decade. As a college town, young students have claimed a large part of the city's population and contribute not not much change population's structure.
 
 #Median income
+#B19013_001 Estimate!!Median household income in the past 12 months
 ```{r}
-years <- c(2010:2020)
+years <- c(2011:2020)
 
 median_income <- map_dfr(years, function(year) {
   get_acs(
@@ -308,6 +354,22 @@ median_income <- map_dfr(years, function(year) {
 columbia_median_income <- median_income %>% filter(grepl("Columbia", NAME))
 
 write_csv(columbia_median_income, "data/columbia_median_income.csv")
+
+#Ranked 14525/31908 places in the US, but the ranking doesn't mean much, since the estimate value for 
+#small geography level like place has large margin of error (especially with the places that have small sample size)
+median_income_rank <- get_acs(
+  geography = "place",
+  variables = "B19013_001",
+  year = 2020
+) %>% arrange(desc(estimate))
+
+#Ranked 310/1082 places of MO
+median_income_rank_mo <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = "B19013_001",
+  year = 2020
+) %>% arrange(desc(estimate))
 ```
 
 
@@ -338,7 +400,7 @@ mo_bigcity_poverty_2020 <- mo_poverty %>% filter(poverty_denomE > 20000)
 
 #Let's see how poverty percent of Columbia has changed the last decade
 ```{r}
-years <- c(2010:2020)
+years <- c(2011:2020)
 
 mo_decade_poverty <- map_dfr(years, function(year) {
   get_acs(
@@ -361,33 +423,20 @@ mo_bigcity_poverty <- mo_decade_poverty %>% filter(poverty_denomE > 20000)
 #Columbia decade poverty rate
 columbia_decade_poverty <- mo_decade_poverty %>% filter(grepl("Columbia", NAME))
 
+ggplot(columbia_decade_poverty, aes(x = year, y = percent)) + 
+  geom_line(color = "navy") + 
+  geom_point(color = "navy", size = 2) + 
+  theme_minimal(base_size = 12) + 
+  labs(title = "Columbia poverty percent over last decade",
+       x = "Year",
+       y = "percent") +
+  scale_y_continuous(limits = c(0, 12))
+
 write_csv(columbia_decade_poverty, "data/columbia_decade_poverty.csv")
 #Good news: The poverty percent has declined year by year, hit the lowest in 2020
 
 ```
 
-#Let see Columbia's poverty ranking year to year
-```{r}
-#How to do a loop here?
-
-mo_bigcity_poverty %>% select(NAME, year, percent) %>% 
-  pivot_wider(names_from = year, values_from = percent)
-
-#2010
-mo_bigcity_poverty %>% filter(year == 2010) %>% 
-  arrange(percent)
-#Ranked 2nd lowest poverty percent among 8 big cities with 11%
-
-#2011
-mo_bigcity_poverty %>% filter(year == 2011) %>% 
-  arrange(percent)
-
-#Ranked 3rd, 10.4%
-
-#2012
-mo_bigcity_poverty %>% filter(year == 2012) %>% 
-  arrange(percent)
-```
 
 
 ```{r}
@@ -403,11 +452,12 @@ mo_cbsa_poverty <- get_acs(
   mutate(percent = (poverty_numE/poverty_denomE)*100) %>% 
   arrange(desc(percent))
   
-#Columbia ranked 5/8 of Missouri's Metro Area with 7.68% of poverty
+#In 2020, Columbia ranked 5/8 of Missouri's Metro Area with 7.68% of poverty
 ```
 
 ```{r}
-years <- c(2010:2020)
+#If we want further exploration of poverty rate among all metro area in the U.S, we can pull the data for the last decade and examine it. In this script, I'm more on comparing Columbia with itself in the past than compare with other places. Just pull the data for later useage.
+years <- c(2011:2020)
 
 cbsa_10year_poverty <- map_dfr(years, function(year) {
   get_acs(
@@ -426,25 +476,16 @@ cbsa_10year_poverty %>% filter(grepl("MO", NAME) & grepl("Metro Area", NAME)) %>
   pivot_wider(names_from = year, values_from = percent)
 ```
 # Education
-```{r}
-#CP02PR_2015_068: 2011-2015 Estimates!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher (from compare_profile_2020)
-#No data available?
-get_acs(
-  geography = "county",
-  table = "CP02PR_2015",
-  state = "MO",
-  year = 2020
-)
-```
-#Note for education: Inconsistent variables (refer to profile series)
-2010-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+
+#Note: Inconsistent variables (refer to profile series)
+2011-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
             DP02_0067P: Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
 
 2019-2020: DP02_0068: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
            DP02_0068P:Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
 
 ```{r}
-years <- c(2010:2018)
+years <- c(2011:2018)
 
 education1 <- map_dfr(years, function(year) {
   get_acs(
@@ -473,6 +514,13 @@ columbia_education2 <- education2 %>% filter(grepl("Columbia", NAME))
 columbia_education <- bind_rows(columbia_education1, columbia_education2)
 
 write_csv(columbia_education, "data/columbia_education.csv")
+
+#Ranked 180/1082?
+edu_rank <- get_acs(
+    geography = "place",
+    state = "MO",
+    variables = "DP02_0067P",
+    year = 2020) %>% arrange(desc(estimate))
 ```
 
 #Unemployment
@@ -495,7 +543,24 @@ columbia_unemployment <- unemployment %>% filter(grepl("Columbia", NAME))
 write_csv(columbia_unemployment, "data/columbia_unemployment.csv")
 ```
 
-#Columbia map in 2011 and 2020 (places function is not currently available for years prior to 2011)
+#This data is to examine amount of people not in labor force
+```{r}
+#DP03_0007P Percent!!EMPLOYMENT STATUS!!Population 16 years and over!!Not in labor force
+years <- c(2011:2020)
+
+notin_laborforce <- map_dfr(years, function(year) {
+  get_acs(
+    geography = "place",
+    variables = c(unemployment_rate = "DP03_0007P"),
+    state = "MO",
+    year = year
+  ) %>% mutate(year = year) 
+}) %>% filter(grepl("Columbia", NAME))
+
+write_csv(notin_laborforce, "notin_laborforce.csv")
+```
+
+#Columbia map in 2011 and 2020 (places function is not currently available for years prior to 2011). Just to see how the city has changed geographically.
 
 ```{r}
 mo_places <- places("MO", cb = FALSE, year = 2020)
@@ -518,202 +583,4 @@ ggplot(columbia2011) +
   theme_void() +
   labs(title = "Columbia 2011")
 ```
-#MO median_age by counties
-```{r}
-mo_counties_median_age <- get_acs(
-  geography = "county",
-  variables = "B01002_001",
-  state = "MO",
-  year = 2020,
-  geometry = TRUE,
-  resolution = "20m")
-
-mo_counties_median_age %>% ggplot(
-  aes(fill = estimate)) +
-  geom_sf() +
-  scale_fill_distiller(palette = "PuBu",
-                       direction = 1) +
-  labs(title = "Missouri Median Age by County, 2020",
-       caption = "Data source: 2020 5-year ACS, US Census Bureau",
-       fill = "ACS estimate") +
-  theme_void()
-
-ggsave(filename = "missouri_median_age.png",
-       path = "maps",
-       width = 8,
-       height = 5,
-       units = "in",
-       dpi = 300)
-
-```
-#MO top 20 counties with highest income
-```{r}
-mo_income_county <- get_acs(
-  geography = "county",
-  variables = "B19013_001",
-  state = "MO",
-  year = 2020,
-  geometry = TRUE
-) %>% mutate(NAME = str_remove(NAME, " County, Missouri"))
-
-mo_income_county <- mo_income_county %>% arrange(desc(estimate))
-
-mo_top20 <- mo_income_county %>% filter(estimate > 58426)
-```
-
-```{r}
-mo_map <- ggplot(mo_top20, aes(fill = estimate)) +
-  geom_sf_interactive(aes(data_id = GEOID)) +
-  scale_fill_distiller(palette = "Greens",
-                       direction = 1,
-                       guide = "none") +
-  theme_void()
-
-mo_plot <- ggplot(mo_top20, aes(x = estimate, y = reorder(NAME, estimate), fill = estimate)) +
-  geom_errorbarh(aes(xmin = estimate - moe, xmax = estimate + moe)) +
-  geom_point_interactive(color = "black", size = 4, shape = 21,
-                         aes(data_id = GEOID)) +
-  scale_fill_distiller(palette = "Greens", direction = 1,
-                       labels = scales::dollar) +
-  scale_x_continuous(labels = scales::dollar) +
-  labs(title = "Top 20 household income by county in Missouri",
-       subtitle = "2016 - 2020 American Community Survey",
-       y = "",
-       x = "ACS estimate (bars represent margin of error)",
-       fill = "ACS estimate") +
-  theme_minimal(base_size = 14)
-
-girafe(ggobj = mo_map + mo_plot, width_svg = 10, height_svg = 5) %>% 
-  girafe_options(opts_hover(css = "fill:cyan;"))
-```
-
-#top 20 highest income counties in 2010
-```{r}
-mo_income_county2010 <- get_acs(
-  geography = "county",
-  variables = "B19013_001",
-  state = "MO",
-  year = 2010,
-  geometry = TRUE
-) %>% mutate(NAME = str_remove(NAME, " County, Missouri"))
-
-mo_income_county2010 <- mo_income_county2010 %>% arrange(desc(estimate))
-
-mo_top20_2010 <- mo_income_county2010 %>% filter(estimate > 45746)
-```
-
-```{r}
-mo_map_2010 <- ggplot(mo_top20_2010, aes(fill = estimate)) +
-  geom_sf_interactive(aes(data_id = GEOID)) +
-  scale_fill_distiller(palette = "Greens",
-                       direction = 1,
-                       guide = "none") +
-  theme_void()
-
-mo_plot_2010 <- ggplot(mo_top20_2010, aes(x = estimate, y = reorder(NAME, estimate), fill = estimate)) +
-  geom_errorbarh(aes(xmin = estimate - moe, xmax = estimate + moe)) +
-  geom_point_interactive(color = "black", size = 4, shape = 21,
-                         aes(data_id = GEOID)) +
-  scale_fill_distiller(palette = "Greens", direction = 1,
-                       labels = scales::dollar) +
-  scale_x_continuous(labels = scales::dollar) +
-  labs(title = "Top 20 household income by county in Missouri",
-       subtitle = "2006 - 2010 American Community Survey",
-       y = "",
-       x = "ACS estimate (bars represent margin of error)",
-       fill = "ACS estimate") +
-  theme_minimal(base_size = 14)
-
-girafe(ggobj = mo_map_2010 + mo_plot_2010, width_svg = 10, height_svg = 5) %>% 
-  girafe_options(opts_hover(css = "fill:cyan;"))
-```
-
-
-#Race 
-```{r}
-twin_cities_race <- get_acs(
-  geography = "tract",
-  variables = c(
-    hispanic = "DP05_0071P",
-    white = "DP05_0077P",
-    black = "DP05_0078P",
-    native = "DP05_0079P",
-    asian = "DP05_0080P"),
-  state = "MO",
-  county = c("Boone", "Audrain", "Randolph", "Cooper",
-             "Howard"),
-  year = 2020,
-  geometry = TRUE) 
-
-groups <- c("Hispanic" = "hispanic",
-            "White" = "white",
-            "Black" = "black",
-            "Native American" = "native",
-            "Asian" = "asian")
-
-ui <- fluidPage(
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(
-        inputId = "group",
-        label = "Select a group to map",
-        choices = groups
-      )
-    ),
-    mainPanel(
-      leafletOutput("map", height = "600")
-    )
-  )
-)
-
-server <- function(input, output) {
-  
-  # Reactive function that filters for the selected group in the drop-down menu
-  group_to_map <- reactive({
-    filter(twin_cities_race, variable == input$group)
-  })
-  
-  # Initialize the map object, centered on the Minneapolis-St. Paul area
-  output$map <- renderLeaflet({
-
-    leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
-      addProviderTiles(providers$Stamen.TonerLite) %>%
-      setView(lng = -93.21,
-              lat = 44.98,
-              zoom = 8.5)
-
-  })
-  
-  observeEvent(input$group, {
-    
-    pal <- colorNumeric("viridis", group_to_map()$estimate)
-    
-    leafletProxy("map") %>%
-      clearShapes() %>%
-      clearControls() %>%
-      addPolygons(data = group_to_map(),
-                  color = ~pal(estimate),
-                  weight = 0.5,
-                  fillOpacity = 0.5,
-                  smoothFactor = 0.2,
-                  label = ~estimate) %>%
-      addLegend(
-        position = "bottomright",
-        pal = pal,
-        values = group_to_map()$estimate,
-        title = "% of population"
-      )
-  })
-  
-}
-
-shinyApp(ui = ui, server = server)
-```
-
-
-# go back to 1950 - 2000
-```{r}
-
-```
-
 

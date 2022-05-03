@@ -1,0 +1,338 @@
+---
+title: "Boone County Exploration"
+output: html_notebook
+---
+#It's much easier to examine Boone County since the census data is more precise and tidycensus package is very well supported this geograpy level. I just try something to practice R skills. 
+
+#MO median_age by counties
+```{r}
+mo_counties_median_age <- get_acs(
+  geography = "county",
+  variables = "B01002_001",
+  state = "MO",
+  year = 2020,
+  geometry = TRUE,
+  resolution = "20m")
+
+mo_counties_median_age %>% ggplot(
+  aes(fill = estimate)) +
+  geom_sf() +
+  scale_fill_distiller(palette = "PuBu",
+                       direction = 1) +
+  labs(title = "Missouri Median Age by County, 2020",
+       caption = "Data source: 2020 5-year ACS, US Census Bureau",
+       fill = "ACS estimate") +
+  theme_void()
+
+ggsave(filename = "missouri_median_age.png",
+       path = "maps",
+       width = 8,
+       height = 5,
+       units = "in",
+       dpi = 300)
+
+```
+#MO top 20 counties with highest income
+```{r}
+mo_income_county <- get_acs(
+  geography = "county",
+  variables = "B19013_001",
+  state = "MO",
+  year = 2020,
+  geometry = TRUE
+) %>% mutate(NAME = str_remove(NAME, " County, Missouri"))
+
+mo_income_county <- mo_income_county %>% arrange(desc(estimate))
+
+mo_top20 <- mo_income_county %>% filter(estimate > 58426)
+```
+
+```{r}
+mo_map <- ggplot(mo_top20, aes(fill = estimate)) +
+  geom_sf_interactive(aes(data_id = GEOID)) +
+  scale_fill_distiller(palette = "Greens",
+                       direction = 1,
+                       guide = "none") +
+  theme_void()
+
+mo_plot <- ggplot(mo_top20, aes(x = estimate, y = reorder(NAME, estimate), fill = estimate)) +
+  geom_errorbarh(aes(xmin = estimate - moe, xmax = estimate + moe)) +
+  geom_point_interactive(color = "black", size = 4, shape = 21,
+                         aes(data_id = GEOID)) +
+  scale_fill_distiller(palette = "Greens", direction = 1,
+                       labels = scales::dollar) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Top 20 household income by county in Missouri",
+       subtitle = "2016 - 2020 American Community Survey",
+       y = "",
+       x = "ACS estimate (bars represent margin of error)",
+       fill = "ACS estimate") +
+  theme_minimal(base_size = 14)
+
+girafe(ggobj = mo_map + mo_plot, width_svg = 10, height_svg = 5) %>% 
+  girafe_options(opts_hover(css = "fill:cyan;"))
+```
+
+#top 20 highest income counties in 2010
+```{r}
+mo_income_county2010 <- get_acs(
+  geography = "county",
+  variables = "B19013_001",
+  state = "MO",
+  year = 2010,
+  geometry = TRUE
+) %>% mutate(NAME = str_remove(NAME, " County, Missouri"))
+
+mo_income_county2010 <- mo_income_county2010 %>% arrange(desc(estimate))
+
+mo_top20_2010 <- mo_income_county2010 %>% filter(estimate > 45746)
+```
+
+```{r}
+mo_map_2010 <- ggplot(mo_top20_2010, aes(fill = estimate)) +
+  geom_sf_interactive(aes(data_id = GEOID)) +
+  scale_fill_distiller(palette = "Greens",
+                       direction = 1,
+                       guide = "none") +
+  theme_void()
+
+mo_plot_2010 <- ggplot(mo_top20_2010, aes(x = estimate, y = reorder(NAME, estimate), fill = estimate)) +
+  geom_errorbarh(aes(xmin = estimate - moe, xmax = estimate + moe)) +
+  geom_point_interactive(color = "black", size = 4, shape = 21,
+                         aes(data_id = GEOID)) +
+  scale_fill_distiller(palette = "Greens", direction = 1,
+                       labels = scales::dollar) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Top 20 household income by county in Missouri",
+       subtitle = "2006 - 2010 American Community Survey",
+       y = "",
+       x = "ACS estimate (bars represent margin of error)",
+       fill = "ACS estimate") +
+  theme_minimal(base_size = 14)
+
+girafe(ggobj = mo_map_2010 + mo_plot_2010, width_svg = 10, height_svg = 5) %>% 
+  girafe_options(opts_hover(css = "fill:cyan;"))
+```
+
+
+#Race 
+```{r}
+twin_cities_race <- get_acs(
+  geography = "tract",
+  variables = c(
+    hispanic = "DP05_0071P",
+    white = "DP05_0077P",
+    black = "DP05_0078P",
+    native = "DP05_0079P",
+    asian = "DP05_0080P"),
+  state = "MO",
+  county = "Boone",
+  year = 2020,
+  geometry = TRUE) 
+
+groups <- c("Hispanic" = "hispanic",
+            "White" = "white",
+            "Black" = "black",
+            "Native American" = "native",
+            "Asian" = "asian")
+
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "group",
+        label = "Select a group to map",
+        choices = groups
+      )
+    ),
+    mainPanel(
+      leafletOutput("map", height = "600")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  # Reactive function that filters for the selected group in the drop-down menu
+  group_to_map <- reactive({
+    filter(twin_cities_race, variable == input$group)
+  })
+  
+  # Initialize the map object, centered on the Minneapolis-St. Paul area
+  output$map <- renderLeaflet({
+
+    leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+      addProviderTiles(providers$Stamen.TonerLite) %>%
+      setView(lng = -93.21,
+              lat = 44.98,
+              zoom = 8.5)
+
+  })
+  
+  observeEvent(input$group, {
+    
+    pal <- colorNumeric("viridis", group_to_map()$estimate)
+    
+    leafletProxy("map") %>%
+      clearShapes() %>%
+      clearControls() %>%
+      addPolygons(data = group_to_map(),
+                  color = ~pal(estimate),
+                  weight = 0.5,
+                  fillOpacity = 0.5,
+                  smoothFactor = 0.2,
+                  label = ~estimate) %>%
+      addLegend(
+        position = "bottomright",
+        pal = pal,
+        values = group_to_map()$estimate,
+        title = "% of population"
+      )
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+# go back to 1950 - 2000
+```{r}
+
+```
+
+```{r}
+mo_race_income <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = c(White = "B03002_003",
+                Black = "B03002_004",
+                Asian = "B03002_006",
+                Hispanic = "B03002_012"),
+  summary_var = "B19013_001",
+  year = 2020)
+
+columbia_race_income <- mo_race_income %>% filter(grepl("Columbia", NAME))
+```
+
+#race 10 years income
+```{r}
+years <- c(2010:2020)
+
+race_income_11year <- map_dfr(years, function(year) {
+  get_acs(
+  geography = "place",
+  state = "MO",
+  variables = c(White = "B19013A_001",
+                Black = "B19013B_001",
+                Asian = "B19013D_001",
+                Hispanic = "B19013I_001"),
+  summary_var = "B19013_001",
+  year = year
+  ) %>% mutate(year = year)
+})
+
+columbia_race_income_11year <- race_income_11year %>% filter(grepl("Columbia", NAME))
+
+columbia_race_income_11year %>% filter(grepl("White", variable))
+
+write_csv(columbia_race_income_11year, "columbia_race_income_11year.csv")
+```
+
+#Columbia race decennial
+```{r}
+columbia_race_2020 <- get_decennial(
+  geography = "place",
+  state = "MO",
+  variables = c(
+    Hispanic = "P2_002N",
+    White = "P2_005N",
+    Black = "P2_006N",
+    Native = "P2_007N",
+    Asian = "P2_008N"
+  ),
+  summary_var = "P2_001N",
+  year = 2020,
+  geometry = TRUE
+) %>%
+  mutate(percent = 100 * (value / summary_value)) %>% filter(grepl("Columbia", NAME))
+
+```
+
+```{r}
+columbia_race_test <- get_acs(
+  geography = "place",
+  variables = c(
+    hispanic = "DP05_0071P",
+    white = "DP05_0077P",
+    black = "DP05_0078P",
+    native = "DP05_0079P",
+    asian = "DP05_0080P"),
+  state = "MO",
+  year = 2020,
+  geometry = TRUE) %>% filter(grepl("Columbia", NAME))
+
+groups <- c("Hispanic" = "hispanic",
+            "White" = "white",
+            "Black" = "black",
+            "Native American" = "native",
+            "Asian" = "asian")
+
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "group",
+        label = "Select a group to map",
+        choices = groups
+      )
+    ),
+    mainPanel(
+      leafletOutput("map", height = "600")
+    )
+  )
+)
+
+server <- function(input, output) {
+  
+  # Reactive function that filters for the selected group in the drop-down menu
+  group_to_map <- reactive({
+    filter(columbia_race_test, variable == input$group)
+  })
+  
+  # Initialize the map object, centered on the Minneapolis-St. Paul area
+  output$map <- renderLeaflet({
+
+    leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+      addProviderTiles(providers$Stamen.TonerLite) %>%
+      setView(lng = -93.21,
+              lat = 44.98,
+              zoom = 8.5)
+
+  })
+  
+  observeEvent(input$group, {
+    
+    pal <- colorNumeric("viridis", group_to_map()$estimate)
+    
+    leafletProxy("map") %>%
+      clearShapes() %>%
+      clearControls() %>%
+      addPolygons(data = group_to_map(),
+                  color = ~pal(estimate),
+                  weight = 0.5,
+                  fillOpacity = 0.5,
+                  smoothFactor = 0.2,
+                  label = ~estimate) %>%
+      addLegend(
+        position = "bottomright",
+        pal = pal,
+        values = group_to_map()$estimate,
+        title = "% of population"
+      )
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+

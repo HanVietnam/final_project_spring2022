@@ -39,6 +39,14 @@ labor_doc <- read_csv("data/Time_series_data/nhgis0021_csv/nhgis0021_ts_nominal_
 columbia_in <- income %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
   rename(median_in_1980 = B79AA1980, median_in_1990 = B79AA1990, median_in_2000 = B79AA2000, poverty_1970 = CL6AA1970, poverty_1980 = CL6AA1980, poverty_1990 = CL6AA1990, poverty_2000 = CL6AA2000) %>% 
   select(PLACE, median_in_1980, median_in_1990, median_in_1990, median_in_2000, poverty_1970, poverty_1980, poverty_1990, poverty_2000)
+
+#Poverty rate
+columbia_poverty <- columbia_in %>% select(PLACE, poverty_1970, poverty_1980, poverty_1990, poverty_2000) %>% 
+  mutate(povertyrate_1970 = 7433/58804*100, povertyrate_1980 = 8802/62061*100, povertyrate_1990 = 13195/69101*100, povertyrate_2000 = 14670/84531*100)
+
+write_csv(columbia_in, "columbia_in.csv")
+
+write_csv(columbia_poverty, "columbia_poverty.csv")
   
 ```
 
@@ -48,13 +56,17 @@ columbia_in <- income %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PL
 columbia_pop <- population %>%  filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
   select("PLACE", "AV0AA1970", "AV0AA1980", "AV0AA1990", "AV0AA2000", "AV0AA2010", "AV0AA2020") %>% 
  rename(pop1970 = AV0AA1970, pop1980 = AV0AA1980, pop1990 = AV0AA1990, pop2000 = AV0AA2000, pop2010 = AV0AA2010, pop2020 = AV0AA2020)
+
+write_csv(columbia_pop, "columbia_pop.csv")
 ```
 
 #Race
 ```{r}
 columbia_race <- race %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
   rename(white_1970 = B18AA1970, white_1980 = B18AA1980, white_1990 = B18AA1990, white_2000 = B18AA2000, white_2010 = B18AA2010, white_2020 = B18AA2020, black_1970 = B18AB1970, black_1980 = B18AB1980, black_1990 = B18AB1990, black_2000 = B18AB2000, black_2010 = B18AB2010, black_2020 = B18AB2020, indian_native_1970 = B18AC1970, indian_native_1980 = B18AC1980, indian_native_1990 = B18AC1990, indian_native_2000 = B18AC2000, indian_native_2010 = B18AC2010, indian_native_2020 = B18AC2020, asian_pacific_1970 = B18AD1970, asian_pacific_1980 = B18AD1980, asian_pacific_1990 = B18AD1990, asian_pacific_2000 = B18AD2000, asian_pacific_2010 = B18AD2010, asian_pacific_2020 = B18AD2020) %>% 
-  select(PLACE, white_1970, white_1980, white_1990, white_2000, white_2010, white_2020, black_1970, black_1980, black_1990, black_2000, black_2010, black_2020, indian_native_1970, indian_native_1980, indian_native_1990, indian_native_2000, indian_native_2010, indian_native_2020, asian_pacific_1970, asian_pacific_1980, asian_pacific_1990, asian_pacific_2000, asian_pacific_2010, asian_pacific_2020) %>% 
+  select(PLACE, white_1970, white_1980, white_1990, white_2000, white_2010, white_2020, black_1970, black_1980, black_1990, black_2000, black_2010, black_2020, indian_native_1970, indian_native_1980, indian_native_1990, indian_native_2000, indian_native_2010, indian_native_2020, asian_pacific_1970, asian_pacific_1980, asian_pacific_1990, asian_pacific_2000, asian_pacific_2010, asian_pacific_2020) 
+
+write_csv(columbia_race, "columbia_race.csv")
   
 ```
 
@@ -65,6 +77,8 @@ columbia_race <- race %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PL
 columbia_edu <- edu %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
   rename(bachelor_1970 = B69AC1970, bachelor_1980 = B69AC1980, bachelor_1990 = B69AC1990, bachelor_2000 = B69AC2000) %>% 
   select(PLACE, bachelor_1970, bachelor_1980, bachelor_1990, bachelor_2000)
+
+write_csv(columbia_edu, "columbia_edu.csv")
 ```
 
 #Labor force
@@ -74,5 +88,8 @@ columbia_edu <- edu %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLAC
 columbia_labor <- labor %>% filter(grepl("Missouri", STATE) & grepl("Columbia", PLACE)) %>% 
   rename(unemployed_1970 = B84AF1970, unemployed_1980 = B84AF1980, unemployed_1990 = B84AF1990, unemployed_2000 = B84AF2000) %>% 
   select(PLACE, unemployed_1970, unemployed_1980, unemployed_1990, unemployed_2000)
+
+write_csv(columbia_labor, "columbia_labor.csv")
 ```
+
 
