@@ -562,6 +562,66 @@ notin_laborforce <- map_dfr(years, function(year) {
 write_csv(notin_laborforce, "notin_laborforce.csv")
 ```
 
+#Compare race income
+```{r}
+mo_race_income <- get_acs(
+  geography = "place",
+  state = "MO",
+  variables = c(White = "B03002_003",
+                Black = "B03002_004",
+                Asian = "B03002_006",
+                Hispanic = "B03002_012"),
+  summary_var = "B19013_001",
+  year = 2020)
+
+columbia_race_income <- mo_race_income %>% filter(grepl("Columbia", NAME))
+```
+
+#race 10 years income
+```{r}
+years <- c(2011:2020)
+
+race_income_10year <- map_dfr(years, function(year) {
+  get_acs(
+  geography = "place",
+  state = "MO",
+  variables = c(White = "B19013A_001",
+                Black = "B19013B_001",
+                Asian = "B19013D_001",
+                Hispanic = "B19013I_001"),
+  summary_var = "B19013_001",
+  year = year
+  ) %>% mutate(year = year)
+})
+
+columbia_race_income_10year <- race_income_10year %>% filter(grepl("Columbia", NAME))
+
+columbia_race_income_10year %>% filter(grepl("White", variable)) #just for checking
+
+write_csv(columbia_race_income_10year, "data/columbia_race_income_10year.csv")
+```
+
+#Columbia race decennial
+```{r}
+columbia_race_2020 <- get_decennial(
+  geography = "place",
+  state = "MO",
+  variables = c(
+    Hispanic = "P2_002N",
+    White = "P2_005N",
+    Black = "P2_006N",
+    Native = "P2_007N",
+    Asian = "P2_008N"
+  ),
+  summary_var = "P2_001N",
+  year = 2020,
+  geometry = TRUE
+) %>%
+  mutate(percent = 100 * (value / summary_value)) %>% filter(grepl("Columbia", NAME))
+
+```
+
+
 #Columbia map in 2011 and 2020 (places function is not currently available for years prior to 2011). Just to see how the city has changed geographically.
 
 ```{r}
