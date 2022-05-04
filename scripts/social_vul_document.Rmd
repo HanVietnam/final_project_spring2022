@@ -1,0 +1,525 @@
+---
+title: "document_social_vul_project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+According to the CDC, Social vulnerability refers to the "resilience of
+communities when confronted by external stresses on human health,
+stresses such as natural or human-caused disasters, or disease
+outbreaks." These methods implement an index similar to the one
+maintained by the CDC which are adapted from methods published by
+Flanagan et al. (2011) in "A Social Vulnerability Index for Disaster
+Management," which describes 13 metrics for assessing the 'social
+vulnerability' or 'adaptive capacity' (Davies et al. 2018) of a census
+tract. This study attempts to replicate these metrics as closely as
+possible at a block group scale using 5 year ACS data in order to
+quantify the capacity of a block-group to respond to a given
+disturbance, minimizing risks to health, safety, property and other
+essential services. This index could be used to identify areas and
+communities at an increased risk and target appropriate response,
+recovery and mitigation efforts.
+
+The SVI/ACI is **just one** component of a vulnerability assessment
+which would include assessing the impact of the hazard itself (disease,
+fire, flood hurricane, etc.), the vulnerability of the physical
+infrastructure, and community assets/resources that could diminish the
+impact of a given hazard and/or aid in recovery efforts in a given
+community (Flanagan et al. 2011).
+
+The index comprises 4 domains including:
+
+> **Socioeconomic Status**
+>
+> -   Percent of Persons Below Poverty Level
+>
+> -   Percent of Persons (age 16+) Unemployed
+>
+> -   Per Capita Income
+
+> **Language & Education**
+>
+> -   Percent of Persons With No 12th Grade Education
+>
+> -   Percent of Persons Do Not Who Speak English
+
+> **Demographics**
+>
+> -   Percent of Persons 65 Years of Age or Older
+>
+> -   Percent of Persons 17 Years of Age or Younger
+>
+> -   Percent of Persons 5 Years of Age or Older With a Disability
+>
+> -   Percent of Single Parent Households
+
+> **Housing & Transportation**
+>
+> -   Percent of Persons Living in Multi-Unit Structure
+>
+> -   Percent of Persons Living in a Mobile Home
+>
+> -   Percent of Persons Living in 'Crowded' Conditions (more than one
+>     person per room)
+>
+> -   Percent of Household With No Vehicle Available
+>
+> -   Percent of Persons Residing in Group Quarters
+
+
+## Works Cited
+
+-   Davies, Ian P., Haugo, Ryan D., Robertson, James C., & Levin,
+    Phillip S. (2018). The unequal vulnerability of communities of color
+    to wildfire. PLoS ONE, 13(11), E0205825.
+    <https://doi.org/10.1371/journal.pone.0205825>
+
+-   Flanagan BE, Gregory EW, Hallisey EJ, Heitgerd JL, Lewis B. A Social
+    Vulnerability Index for Disaster Management. J Homel Secur Emerg
+    Manag. 2011;8. <https://doi.org/10.2202/1547-7355.1792>
+
+## Tidy Census
+
+-   Kyle Walker (2020). tidycensus: Load US Census Boundary and
+    Attribute Data as 'tidyverse' and 'sf'-Ready Data Frames. R package
+    version 0.9.6. <https://CRAN.R-project.org/package=tidycensus>
+
+## Block Group Level
+
+These were the variables available/derived at the block group level
+
+> -   **Total Population**
+>
+> -   **Percent of Population with No Vehicle Available**
+>
+> -   **Percent of Population Unemployed**
+>
+> -   **Percent of Population Speak English Less Than "Very Well"**
+>
+> -   **Percent of Population Living in Mobile Homes**
+>
+> -   **Percent of Population Living in Accommodations W/ Less Than 1
+>     Room Per Person (Crowding)**
+>
+> -   **Percent of Population 65+**
+>
+> -   **Percent of Population 65+**
+>
+> -   **Percent of Population 25+ Less Than Hs Graduate**
+>
+> -   **Percent of Population 17 Years and Under**
+>
+> -   **Percent of Housing Units W/ 10+ Units in Structure**
+>
+> -   **Percent Minority**
+>
+> -   **Per Capita Income**
+
+### Blockgroup Level Variables
+
+These are all the variables used in the calculations at the blockgroup
+level
+
+```{r}
+c('B25003_001','B25003_003','B25070_007','B25070_008','B25070_009','B25070_010','B25071_001','B11007_001','B11007_003','B25034_001','B25034_008','B25034_009','B25034_01','B25034_011','B01003_001','B19301_001','B25033_001','B25033_006','B25033_007','B25033_012','B25033_013','B25044_001','B25044_003','B25044_010','B23025_003','B23025_005','B25014_001','B25014_005','B25014_006','B25014_007','B25014_011','B25014_012','B25014_013','B25024_001','B25024_007','B25024_008','B25024_009','B09021_022','B09021_001','B01001_020','B01001_021','B01001_022','B01001_023','B01001_024','B01001_025','B01001_044','B01001_045','B01001_046','B01001_047','B01001_048','B01001_049','B99163_001','B99163_005','B01001_003','B01001_004','B01001_005','B01001_006','B01001_027','B01001_028','B01001_029','B01001_030','B03002_003','B02001_004','B02001_00','B02001_003','B03003_003','B02001_006','B02001_007','B02001_008','B03002_003','B03002_001','B02001_001','B25002_001','B25002_003','B15003_001','B15003_016','B15003_017','B15003_018','B15003_019','B15003_020','B15003_021','B15003_022','B15003_023','B15003_024','B15003_025')
+```
+
+### How The Values Were Calculated (all the varialbes are checked by Han Vu for 2020 data)
+
+#### **Total Population**
+
+    B01003_001 
+
+#### **Per Capita Income**
+
+      B19301_001 - Estimate!!Per capita income in the past 12 months (in 2020 inflation-adjusted dollars)
+
+#### **Percent of Population Below Poverty Level**
+
+      (C17002_002+C17002_003)/C17002_001
+
+    # C17002_001 - Estimate!!Total - Ratio of Income to Poverty in the Last 12 Months 
+    # C17002_002 - Estimate!!Total!!Under .50 
+    # C17002_003 - Estimate!!Total!!.50 to .99
+
+#### **Percent of Population 25+ with Less than a 12th Grade Education**
+
+      1 - (B15003_016+B15003_017+B15003_018+B15003_019+B15003_020+B15003_021+B15003_022+B15003_023+B15003_024+B15003_025)/B15003_001
+
+    # B15003_001 - Estimate!!Total 
+    # B15003_016 - Estimate!!Total!!12th grade, no diploma # B15003_017 - Estimate!!Total!!Regular high school diploma 
+    # B15003_018 - Estimate!!Total!!GED or alternative credential 
+    # B15003_019 - Estimate!!Total!!Some college, less than 1 year 
+    # B15003_020 - Estimate!!Total!!Some college, 1 or more years, no degree #B15003_021 - Estimate!!Total!!Associate's degree 
+    # B15003_022 - Estimate!!Total!!Bachelor's degree 
+    # B15003_023 - Estimate!!Total!!Master's degree 
+    # B15003_024 - Estimate!!Total!!Professional school degree 
+    # B15003_025 - Estimate!!Total!!Doctorate degree
+
+#### **Percent of Population Living in Mobile Homes - Mobile Homes Estimate**
+
+      (B25033_006+B25033_007+B25033_012+B25033_013)/B25033_001
+
+    # B25033_001 - Estimate!!Total #B25033_006 - Estimate!!Total!!Owner occupied!!Mobile home 
+    # B25033_007 - Estimate!!Total!!Owner occupied!!Boat, RV, van, etc. # B25033_012 - Estimate!!Total!!Renter occupied!!Mobile home 
+    # B25033_013 - Estimate!!Total!!Renter occupied!!Boat, RV, van, etc.
+
+#### **Percent of Population with No Vehicle Available - Households With No Vehicle Available Estimate**
+
+      (B25044_003+B25044_010)/B25044_001
+
+    # B25044_001 - Estimate!!Total 
+    # B25044_003 - Estimate!!Total!!Owner occupied!!No vehicle available # B25044_010 - Estimate!!Total!!Renter occupied!!No vehicle available
+
+#### **Percent of Population Unemployed - Civilian (Age 16+) Unemployed Estimate**
+
+      B23025_005/B23025_003
+
+    # B23025_003 - Estimate!!Total!!In labor force!!Civilian labor force # B23025_005 - Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed
+
+> **Notes:** According to the Census Bureau "In Civilian Labor Force"
+> includes all civilians 16 years older.
+
+#### **Percent of Population Living In Accommodations with Less Than 1 Room Per Person/Crowding - At Household Level, Occupied Housing Units, More People Than Rooms Estimate**
+
+      (B25014_005+B25014_006+B25014_007+B25014_011+B25014_012+B25014_013)/B25014_001
+
+    # B25014_001 - Estimate!!Total 
+    # B25014_005 - Estimate!!Total!!Owner occupied!!1.01 to 1.50 occupants per room 
+    # B25014_006 - Estimate!!Total!!Owner occupied!!1.51 to 2.00 occupants per room 
+    # B25014_007 - Estimate!!Total!!Owner occupied!!2.01 or more occupants per room 
+    # B25014_011 - Estimate!!Total!!Renter occupied!!1.01 to 1.50 occupants per room 
+    # B25014_012 - Estimate!!Total!!Renter occupied!!1.51 to 2.00 occupants per room 
+    # B25014_013 - Estimate!!Total!!Renter occupied!!2.01 or more occupants per room
+
+#### **Percent of Housing Units with 10+ Units in Structure - Housing in Structures With 10 or More Units Estimate**
+
+      (B25024_007+B25024_008+B25024_009)/B25024_001
+
+    # B25024_001 - Estimate!!Total 
+    # B25024_007 - Estimate!!Total!!10 to 19 
+    # B25024_008 - Estimate!!Total!!20 to 49 
+    # B25024_009 - Estimate!!Total!!50 or more
+
+#### **Percent Of Population 65+ - Persons Aged 65 And Older Estimate**
+
+      B09021_022/B09021_001
+
+    # B09021_022 - Estimate!!Total!!65 years and over 
+    # B09021_001 - Estimate!!Total
+
+#### **Percent Of Population Who Do Not Speak English**
+
+      B99163_005/B99163_001
+
+    # B99163_001 - Estimate!!Total 
+    # B99163_005 - Estimate!!Total!!Speak other languages!!Ability to speak English –!!Not allocated
+
+> **Notes:** According to Flanagan et al. (2011) this should be "percent
+> of persons who speak English "less than well," however, a suitable
+> variable could not be found to represent this in the 2018 ACS, that is
+> not to say one doesn't exist.
+
+#### **Percent of Population 17 Years of Age and Under**
+
+      (B01001_003+B01001_004+B01001_005+B01001_006+B01001_027+B01001_028+B01001_029+B01001_030)/B01003_001
+
+    # B01001_003 - Estimate!!Total!!Male!!Under 5 years 
+    # B01001_004 - Estimate!!Total!!Male!!5 to 9 years 
+    # B01001_005 - Estimate!!Total!!Male!!10 to 14 years 
+    # B01001_006 - Estimate!!Total!!Male!!15 to 17 years 
+    # B01001_027 - Estimate!!Total!!Female!!Under 5 years 
+    # B01001_028 - Estimate!!Total!!Female!!5 to 9 years 
+    # B01001_029 - Estimate!!Total!!Female!!10 to 14 years 
+    # B01001_030 - Estimate!!Total!!Female!!15 to 17 years
+
+#### **Percent Minority**
+
+      1-(B03002_003/B03002_001)
+
+    # B03002_003 - Estimate!!Total (WHITE ALONE, NOT HISPANIC OR LATINO)
+
+> **Notes:** I used the B03002 table here because "Hispanic/Latino" is
+> not considered a "race" by the U.S. Census Bureau, people of Hispanic
+> or Latino origin either don't answer this question or they
+> select/write-in any number of racial categories and which one they
+> select can vary by geography and other demographic factors. According
+> to the Pew Research Center, "In the 2010 census, 37% of Hispanics -
+> 18.5 million people - said they belonged to "some other race." Among
+> those who answered the race question this way in the 2010 census,
+> 96.8% were Hispanic. And among those Hispanics who did, 44.3%
+> indicated on the form that Mexican, Mexican American or Mexico was
+> their race, 22.7% wrote in Hispanic or Hispano or Hispana, and 10%
+> wrote in Latin American or Latino or Latin." The Census Bureau
+> suggests that if you want to treat "Hispanic" as a "race-like"
+> category, you use the B03002 table. So if you were to use the B02001
+> table for "Percent White", it could also include minority Hispanic
+> groups that identify as white.
+>
+> **Sources:**
+>
+> -   [\<https://censusreporter.org/topics/race-hispanic/\>](https://censusreporter.org/topics/race-hispanic/){.uri}
+>
+> -   [\<https://www.pewsocialtrends.org/2015/06/11/chapter-1-race-and-multiracial-americans-in-the-u-s-census/\>](https://www.pewsocialtrends.org/2015/06/11/chapter-1-race-and-multiracial-americans-in-the-u-s-census/){.uri}
+
+### **Optional Variables (Not Used in SVI)**
+
+#### **Percent of Homes Occupied**
+
+      1-B25002_003/B25002_001
+
+    # B25002_001 - Estimate!!Total (TOTAL NUMBER OF HOUSING UNITS) 
+    # B25002_003 - Estimate!!Total!!Vacant
+
+#### **Percent of Homes Renter Occupied**
+
+      B25003_003/B25003_001
+
+    # B25003_001 - Estimate!!Total B25003_003 - Estimate!!Total!!Renter occupied
+
+> **Notes:** According to Lee et al. 2019, "Previous studies have shown
+> that renters lack resources prior to a disaster (preparedness) and
+> continue to do so in post disaster times (recovery). Before a
+> disaster, available resources differ, including available funds and
+> housing condition and location. Renters have limited household,
+> social, and physical resources prior to a disaster, as compared to
+> those of owners. Additionally, renters tend to suffer more severe
+> damage during a disaster. During recovery, renters limited financial
+> resources (i.e., lack of insurance and less governmental assistance;
+> Bolin and Stanford 1998; Comerio 1998), as well as inadequate social
+> and political capital, mean that they have less influence on decisions
+> being made about recovery (Morrow 1999). This causes them to face
+> greater struggles over a longer period of time." (Lee et al. 2019)
+>
+> **Sources:**
+>
+> -   Lee, J., & Van Zandt, S. (2019). Housing Tenure and Social
+>     Vulnerability to Disasters: A Review of the Evidence. Journal of
+>     Planning Literature, 34(2), 156-170.
+
+#### **Percent of Households Paying Mote than 30% of Their Income on Rent**
+
+      (B25070_007+B25070_008+B25070_009+B25070_010)/b25070_001
+
+    # B25070_007 - Estimate!!Total!!30.0 to 34.9 percent 
+    # B25070_008 - Estimate!!Total!!35.0 to 39.9 percent 
+    # B25070_009 - Estimate!!Total!!40.0 to 49.9 percent 
+    # B25070_010 - Estimate!!Total!!50.0 percent or more
+
+#### **Median Gross Rent as a Percentage of Income**
+
+      B25071_001
+
+    # B25071_001 - Estimate!!Median gross rent as a percentage of household income
+
+> **Notes:** According to the U.S. Department of Housing and Urban
+> Development (HUD) "Families who pay more than 30 percent of their
+> income for housing are considered cost burdened and may have
+> difficulty affording necessities such as food, clothing,
+> transportation and medical care." They may be above poverty level, but
+> the cost of housing may still be a factor that effects their
+> vulnerability and ability to recover from a crisis (HUD). According to
+> Diaz et al., "Renting, crowding, and unaffordable housing are directly
+> and indirectly linked with negative outcomes for children and adults
+> (e.g., Evans, Lepore, Shejwal, & Palsane, 1998; Haurin, Parcel, &
+> Haurin, 2002; Leventhal & Newman, 2010; Pollack, Griffın, & Lynch,
+> 2010). These housing situations, coupled with other vulnerabilities,
+> also increase exposure to harm and limit the ability of individuals
+> and households to cope with and recover from the impacts of
+> environmental hazards (...) For many households, spending more on
+> housing costs than is standard suggests housing situations that are
+> unstable, difficult to maintain over the long term, and may reflect
+> stresses that are otherwise difficult to detect" (excerpt from Diaz et
+> al. 2017).
+>
+> **Sources:**
+>
+> -   Díaz Mcconnell, E. (2017). Rented, Crowded, and Unaffordable?
+>     Social Vulnerabilities and the Accumulation of Precarious Housing
+>     Conditions in Los Angeles. Housing Policy Debate, 27(1), 60-79.
+
+#### **Percent of Households with Seniors 65+ Living Alone**
+
+      B11007_003/B11007_001
+
+    # B11007_001 - Estimate!!Total 
+    # B11007_003 - Estimate!!Total!!Households with one or more people 65 years and over!!1-person household
+
+> **Notes:** "That seniors are more vulnerable to disasters is a
+> proposition that is supported by a growing body of literature.
+> Experimental research confirms that the elderly and disabled confront
+> unique difficulties during periods of evacuation." (Donner et al.
+> 2008). For example: "Half of the deaths from Hurricane Katrina were
+> adults age 75 and older (Brunkard, Namulanda, and Ratard, 2008), and
+> 63 percent of the deaths after the 1995 heat wave in Chicago were
+> adults age 65 or older (Whitman et al. 1997)" ... A 2012 survey found
+> that 15 percent of U.S. adults age 50 or older would not be able to
+> evacuate their homes without help, and half of this group would need
+> help from someone outside the household (National Association of Area
+> Agencies on Aging, National Council on Aging, and UnitedHealthcare,
+> 2012) (Shih et al. 2018)". According to Chau et al. "Living alone
+> increases the risk of social isolation, which may, in turn, be
+> associated with poorer mental and physical health, and leads to
+> problems in escape and recovery from emergency situations" (Chau et
+> al. 2014).
+>
+> **Sources:**
+>
+> -   Chau, P., Gusmano, H., Cheng, M., Cheung, K., & Woo, J. (2014).
+>     Social Vulnerability Index for the Older People---Hong Kong and
+>     New York City as Examples. Journal of Urban Health, 91(6),
+>     1048-1064.
+>
+> -   Shih RA, Acosta JD, Chen EK, et al. Improving Disaster Resilience
+>     Among Older Adults: Insights from Public Health Departments and
+>     Aging-in-Place Efforts. Rand Health Q. 2018;8(1):3. Published 2018
+>     Aug 2.
+
+#### **Percent of Homes Built Before 1969**
+
+      (B25034_008+B25034_009+B25034_010+B25034_011)/B25034_001
+
+    # B25034_001 - Estimate!!Total 
+    # B25034_008 - Estimate!!Total!!Built 1960 to 1969 
+    # B25034_009 - Estimate!!Total!!Built 1950 to 1959 
+    # B25034_010 - Estimate!!Total!!Built 1940 to 1949 
+    # B25034_011 - Estimate!!Total!!Built 1939 or earlier
+
+> **Notes:** "Congress created the National Flood Insurance Program
+> (NFIP) in 1968 In order to participate, jurisdictions are required to
+> adopt a floodplain management ordinance. Units that pre-date the local
+> adoption of those ordinances are more likely to be out of compliance
+> with the design and construction standards they require. Thus, the age
+> of the buildings in floodplains may offer some insight into whether
+> buildings are designed or retrofitted for flooding." (Furman Center)
+
+## Tract Level
+
+These Variables were only found to be available at the Tract level, that
+is not to say a suitable variable does not exist at the block-group
+level
+
+> -   **Percent of Population Below Poverty Level**
+>
+> -   **Percent of Population 5\< with a Disability**
+>
+> -   **Percent of Population Living in Group Quarters**
+>
+> -   **Percent of Children Living in Single Parent Households**
+
+### Tract Level Variables
+
+```{r}
+c('B18101_025','B18101_026','B18101_006','B18101_007','C18130_009','C18130_010','C18130_016','C18130_017','B17020_001','B17020_002','B26001_001','B11001_001','B11004_012','B11004_018','B11001_001','B09008_010','B09008_011','B09008_012','B17023_001','B17023_016','B17023_017','B17023_018')
+```
+
+### How The Values Were Calculated
+
+#### **Percent of Population 5\< with a Disability - Civilian Non-institutionalized Population With A Disability Estimate)**
+
+      (B18101_026+B18101_007+C18130_010+C18130_017)/(B18101_025+B18101_006+C18130_009+C18130_016)
+
+    # B18101_025 - Estimate!!Total!!Female!!5 to 17 years 
+    # B18101_026 - Estimate!!Total!!Female!!5 to 17 years!!With a disability 
+    # B18101_006 - Estimate!!Total!!Male!!5 to 17 years 
+    # B18101_007 - Estimate!!Total!!Male!!5 to 17 years!!With a disability 
+    # C18130_009 - Estimate!!Total!!18 to 64 years 
+    # C18130_010 - Estimate!!Total!!18 to 64 years!!With a disability 
+    # C18130_016 - Estimate!!Total!!65 years and over 
+    # C18130_017 - Estimate!!Total!!65 years and over!!With a disability
+
+#### **Percent of Population Living in Group Quarters**
+
+      B26001_001/B01003_001
+
+    # B26001_001 - Estimate!!Total!!Group quarters population
+
+#### **Percent of Children Living in Single Parent Households** #Han Vu: This variable is for 2010 - 2018 survey. The variable has changed for the 2016 - 2020 survey 
+2010 - 2018:
+      (B09008_010+B09008_011+B09008_012)/B09008_001
+
+    # B09008_001 - Estimate!!Total 
+    # B09008_010 - Estimate!!Total!!No unmarried partner of householder present!!In family households!!In male householder, no wife present, family 
+    # B09008_011 - Estimate!!Total!!No unmarried partner of householder present!!In family households!!In female householder, no husband present, family 
+    # B09008_012 - Estimate!!Total!!No unmarried partner of householder present!!In nonfamily households
+    
+2020:
+B09005_001	Estimate!!Total:	HOUSEHOLD TYPE FOR CHILDREN UNDER 18 YEARS IN HOUSEHOLDS (EXCLUDING HOUSEHOLDERS, SPOUSES, AND UNMARRIED PARTNERS)
+
+B09005_004	Estimate!!Total:!!In male householder, no spouse/partner present household	HOUSEHOLD TYPE FOR CHILDREN UNDER 18 YEARS IN HOUSEHOLDS (EXCLUDING HOUSEHOLDERS, SPOUSES, AND UNMARRIED PARTNERS)
+B09005_005	Estimate!!Total:!!In female householder, no spouse/partner present household	HOUSEHOLD TYPE FOR CHILDREN UNDER 18 YEARS IN HOUSEHOLDS (EXCLUDING HOUSEHOLDERS, SPOUSES, AND UNMARRIED PARTNERS)
+
+    
+    **OR** (these variables are the same for 2018 and 2020)
+    
+      (B23008_008+B23008_021)/(B23008_002+B23008_015)
+
+    #B23008_008 - Estimate!!Total!!Under 6 years!!Living with one parent
+    #B23008_021 - Estimate!!Total!!6 to 17 years!!Living with one parent
+    #B23008_002 - Estimate!!Total!!Under 6 years
+    #B23008_015 - Estimate!!Total!!6 to 17 years
+    
+
+> **Notes:** According to Flanagan et al. this should be an estimate of
+> Percent male or female householder, no spouse present, with children
+> under 18. There may be a variety of approximations available,
+> including, but not limited to B23008; however, these tables fails to
+> represent a variety of housing situations in which a child may be
+> under the guardianship of a single adult caretaker and may also
+> include situations in which a household is classified as a single
+> parent household where there is the presence of an unmarried partner
+> who is likely to provide support in the responsibilities of parenting,
+> diminishing the unique risk faced by a single parent in a disaster
+> scenario. According the Census Bureau, "A nonfamily householder" is a
+> "householder living alone or with non-relatives only." A family is a
+> group of two people or more (one of whom is the householder) related
+> by birth, marriage, or adoption and residing together so If there is
+> 1.) No "unmarried partner of householder present" and 2.) It is a
+> nonfamily household so the absence of a married partner is assumed and
+> 3.) There is a child present then I assumed it would include children
+> living with unmarried non-relatives where there is no unmarried
+> partner present so although the child is unrelated to their adult
+> caretaker, their adult care taker would function essentially as a
+> "single parent."
+>
+> Users may compare this estimate with those of B23008 to determine
+> which is more appropriate in their area of study, if the difference in
+> these estimates is not significant it may be preferable to use B23008
+> since this can be calculated at the block group scale.
+
+### **Optional Variables (Not Used in SVI)**
+
+#### Percent Single Mother Households Below Poverty Line
+
+      (B17023_016+B17023_017+B17023_018)/B22002_001
+
+    # B17023_001 - Estimate!!Total 
+    # B17023_016 - Estimate!!Total!!Income in the past 12 months below poverty level!!Other families!!Female householder, no husband present!!1 or 2 own children of the householder 
+    # B17023_017 - Estimate!!Total!!Income in the past 12 months below poverty level!!Other families!!Female householder, no husband present!!3 or 4 own children of the householder 
+    # B17023_018 - Estimate!!Total!!Income in the past 12 months below poverty level!!Other families!!Female householder, no husband present!!5 or more own children of the householder
+
+> **Notes:** "Demographic data shows that single mothers tend to be less
+> educated and poorer than the general population, thus placing them at
+> greater risk to disasters (...) Morrow and Enarson (1996) observed,
+> during the long-term recovery period following Hurricane Andrew, that
+> poor and minority women experienced significant difficulties in
+> accessing relief and recovery aid given that policy programs were
+> reportedly set up only with small, nuclear households in mind.
+> Moreover, Morrow and Enarson argue that women were victims of
+> exploitation and fraud during the recovery period. In another study,
+> Donner (2003) shows that census tracts in the United States with
+> larger percentages of single mothers are more likely to experience a
+> tornado death and/or injury. Rodriguez and Russell (2006) also report
+> that women and children were disproportionately affected by the 2004
+> Indian Ocean Tsunami and were more likely to be victims (e.g.,
+> fatalities) of this catastrophic event relative to their male
+> counterparts." (excerpt from Donner et al. 2008)
+>
+> **Sources:** Donner, W., & Rodríguez, H. (2008). Population
+> Composition, Migration and Inequality: The Influence of Demographic
+> Changes on Disaster Risk and Vulnerability. Social Forces, 87(2),
+> 1089-1114. Retrieved February 20, 2020, from
+> www.jstor.org/stable/20430904
