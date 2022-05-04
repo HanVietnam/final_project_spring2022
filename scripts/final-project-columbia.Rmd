@@ -45,7 +45,7 @@ compare_profile_2020 <- load_variables(2020, "acs5/cprofile")
 compare_profile_2015 <- load_variables(2015, "acs5/cprofile")
 ```
 
-#Total population 2011 - 2020. Geography = "place"
+#Total population 2011 - 2020. Geography = "place" (refer to "vars_x" file for varialbes )
 #Variable: B01001_001 Estimate!!Total:
 
 ```{r}
@@ -72,7 +72,7 @@ pop_rank <- get_acs(
 ) %>% arrange(desc(estimate))
 ```
 
-#Median age
+#Median age ("vars_x" datafile)
 #Variable: B01002_001 Estimate!!Median age --!!Total:
 ```{r}
 years <- c(2011:2020)
@@ -376,7 +376,7 @@ median_income_rank_mo <- get_acs(
 #Poverty rate
 ```{r}
 #Missouri's cities poverty rate in 2020: to see where Columbia is
-
+#("vars_x" file)
 #B17010_002: Estimate!!Total:!!Income in the past 12 months below poverty level (Concept: POVERTY STATUS IN THE PAST 12 MONTHS OF FAMILIES BY FAMILY TYPE BY PRESENCE OF RELATED CHILDREN UNDER 18 YEARS BY AGE OF RELATED CHILDREN)
 
 #B17010_001: Estimate!!Total: (Concept: POVERTY STATUS IN THE PAST 12 MONTHS OF FAMILIES BY FAMILY TYPE BY PRESENCE OF RELATED CHILDREN UNDER 18 YEARS BY AGE OF RELATED CHILDREN)
@@ -423,6 +423,7 @@ mo_bigcity_poverty <- mo_decade_poverty %>% filter(poverty_denomE > 20000)
 #Columbia decade poverty rate
 columbia_decade_poverty <- mo_decade_poverty %>% filter(grepl("Columbia", NAME))
 
+#Plot just for checking (ugly plot by the way)
 ggplot(columbia_decade_poverty, aes(x = year, y = percent)) + 
   geom_line(color = "navy") + 
   geom_point(color = "navy", size = 2) + 
@@ -477,7 +478,7 @@ cbsa_10year_poverty %>% filter(grepl("MO", NAME) & grepl("Metro Area", NAME)) %>
 ```
 # Education
 
-#Note: Inconsistent variables (refer to profile series) (profile variables)
+#Note: Inconsistent variables (refer to profile series) (profile variables "profile_x" files)
 2011-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher
             DP02_0067P: Percent Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree
 
@@ -527,6 +528,7 @@ edu_rank <- get_acs(
 
 #Unemployment
 ```{r}
+#(profile variables "profile_x" files)
 #DP03_0009P: Percent!!EMPLOYMENT STATUS!!Civilian labor force!!Unemployment Rate
 
 years <- c(2010:2020)
@@ -547,6 +549,7 @@ write_csv(columbia_unemployment, "data/columbia_unemployment.csv")
 
 #This data is to examine amount of people not in labor force
 ```{r}
+#(profile variables)
 #DP03_0007P Percent!!EMPLOYMENT STATUS!!Population 16 years and over!!Not in labor force
 years <- c(2011:2020)
 
@@ -564,6 +567,12 @@ write_csv(notin_laborforce, "notin_laborforce.csv")
 
 #Compare race income
 ```{r}
+#Variables (ACS5 2016 - 2020)
+#B03002_003	Estimate!!Total:!!Not Hispanic or Latino:!!White alone
+#B03002_004 B03002_004	Estimate!!Total:!!Not Hispanic or Latino:!!Black or African American alone
+#B03002_006	Estimate!!Total:!!Not Hispanic or Latino:!!Asian alone
+#B03002_012	Estimate!!Total:!!Hispanic or Latino:
+#B19013_001	Estimate!!Median household income in the past 12 months (in 2020 inflation-adjusted dollars)
 mo_race_income <- get_acs(
   geography = "place",
   state = "MO",
@@ -601,7 +610,7 @@ columbia_race_income_10year %>% filter(grepl("White", variable)) #just for check
 write_csv(columbia_race_income_10year, "data/columbia_race_income_10year.csv")
 ```
 
-#Columbia race decennial
+#Columbia race decennial (just to check)
 ```{r}
 columbia_race_2020 <- get_decennial(
   geography = "place",
