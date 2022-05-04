@@ -1,0 +1,11 @@
+GEOID,NAME,variable,estimate,moe,year
+2915670,"Columbia city, Missouri",median_income,43102,1265,2011
+2915670,"Columbia city, Missouri",median_income,43084,1417,2012
+2915670,"Columbia city, Missouri",median_income,43262,1306,2013
+2915670,"Columbia city, Missouri",median_income,43776,1599,2014
+2915670,"Columbia city, Missouri",median_income,44907,2063,2015
+2915670,"Columbia city, Missouri",median_income,45221,1735,2016
+2915670,"Columbia city, Missouri",median_income,47236,1761,2017
+2915670,"Columbia city, Missouri",median_income,49277,2053,2018
+2915670,"Columbia city, Missouri",median_income,51276,2035,2019
+2915670,"Columbia city, Missouri",median_income,53447,2355,2020

@@ -1,0 +1,749 @@
+--------------------------------------------------------------------------------
+Codebook for NHGIS data file 'nhgis0021_ts_nominal_place'
+--------------------------------------------------------------------------------
+ 
+Contents
+    - Data Summary
+    - Data Dictionary
+    - Geographic Integration Methods
+    - Source Data
+    - Citation and Use
+ 
+Detailed notes on time series design and comparability are available at: 
+    https://www.nhgis.org/sites/www.nhgis.org/files/nhgis_time_series_tables.pdf 
+ 
+--------------------------------------------------------------------------------
+Data Summary
+--------------------------------------------------------------------------------
+ 
+Time series layout:     Time varies by column
+Geographic level:       Place (by State)
+Geographic integration: Nominal
+Measurement times:      1970, 1980, 1990, 2000, 2008-2012, 2015-2019
+ 
+Tables:
+ 
+1. Persons 16 Years and Over by Labor Force and Employment Status [6]
+   Years: 1970, 1980, 1990, 2000, 2008-2012, 2015-2019
+   Code:  B84
+ 
+2. Commuters by Travel Time to Work [8]
+   Years: 1980, 1990, 2000, 2008-2012, 2015-2019
+   Code:  C50
+ 
+--------------------------------------------------------------------------------
+Data Dictionary
+--------------------------------------------------------------------------------
+ 
+Context Fields 
+        NHGISCODE:   NHGIS Integrated Geographic Unit Code
+        GJOIN1970:   GIS Join Match Code, 1970
+        GJOIN1980:   GIS Join Match Code, 1980
+        GJOIN1990:   GIS Join Match Code, 1990
+        GJOIN2000:   GIS Join Match Code, 2000
+        GJOIN2012:   GIS Join Match Code, 2012
+        GJOIN2019:   GIS Join Match Code, 2019
+        STATE:       NHGIS Integrated State Name
+        STATEFP:     FIPS State Code
+        STATENH:     NHGIS Integrated State Code
+        PLACE:       NHGIS Integrated Place Name
+        PLACEA:      NHGIS Integrated Place Code
+        NAME1970:    Area Name, 1970
+        NAME1980:    Area Name, 1980
+        NAME1990:    Area Name, 1990
+        NAME2000:    Area Name, 2000
+        NAME2012:    Area Name, 2012
+        NAME2019:    Area Name, 2019
+ 
+Table 1: (B84) Persons 16 Years and Over by Labor Force and Employment Status [6]
+    Time series AA: Persons: 16 years and over ~ In labor force
+        B84AA1970:   1970: Persons: 16 years and over ~ In labor force
+        B84AA1980:   1980: Persons: 16 years and over ~ In labor force
+        B84AA1990:   1990: Persons: 16 years and over ~ In labor force
+        B84AA2000:   2000: Persons: 16 years and over ~ In labor force
+        B84AA125:    2008-2012: Persons: 16 years and over ~ In labor force
+        B84AA125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ In labor force
+        B84AA195:    2015-2019: Persons: 16 years and over ~ In labor force
+        B84AA195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ In labor force
+    Time series AB: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB1970:   1970: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB1980:   1980: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB1990:   1990: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB2000:   2000: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB125:    2008-2012: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB195:    2015-2019: Persons: 16 years and over ~ In labor force--In Armed Forces
+        B84AB195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ In labor force--In Armed Forces
+    Time series AC: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC1970:   1970: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC1980:   1980: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC1990:   1990: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC2000:   2000: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC125:    2008-2012: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC195:    2015-2019: Persons: 16 years and over ~ In labor force--Civilian
+        B84AC195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ In labor force--Civilian
+    Time series AD: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD1970:   1970: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD1980:   1980: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD1990:   1990: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD2000:   2000: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD125:    2008-2012: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD195:    2015-2019: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        B84AD195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ In labor force--Civilian--Employed
+    Time series AE: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE1970:   1970: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE1980:   1980: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE1990:   1990: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE2000:   2000: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE125:    2008-2012: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE195:    2015-2019: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        B84AE195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+    Time series AF: Persons: 16 years and over ~ Not in labor force
+        B84AF1970:   1970: Persons: 16 years and over ~ Not in labor force
+        B84AF1980:   1980: Persons: 16 years and over ~ Not in labor force
+        B84AF1990:   1990: Persons: 16 years and over ~ Not in labor force
+        B84AF2000:   2000: Persons: 16 years and over ~ Not in labor force
+        B84AF125:    2008-2012: Persons: 16 years and over ~ Not in labor force
+        B84AF125M:   Margin of error: 2008-2012: Persons: 16 years and over ~ Not in labor force
+        B84AF195:    2015-2019: Persons: 16 years and over ~ Not in labor force
+        B84AF195M:   Margin of error: 2015-2019: Persons: 16 years and over ~ Not in labor force
+ 
+Table 2: (C50) Commuters by Travel Time to Work [8]
+    Time series AA: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        C50AA195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+    Time series AB: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        C50AB195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+    Time series AC: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        C50AC195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+    Time series AD: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        C50AD195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+    Time series AE: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        C50AE195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+    Time series AF: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        C50AF195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+    Time series AG: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        C50AG195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+    Time series AH: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH1980:   1980: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH1990:   1990: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH2000:   2000: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH125:    2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH125M:   Margin of error: 2008-2012: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH195:    2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        C50AH195M:   Margin of error: 2015-2019: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+ 
+--------------------------------------------------------------------------------
+Geographic Integration Methods
+--------------------------------------------------------------------------------
+ 
+Nominal Integration:
+
+    Nominally integrated tables link geographic units across time according to
+    their names and codes, disregarding any changes in unit boundaries. The
+    identified geographic units match those from each census source, so the
+    spatial definitions and total number of units may vary from one time to
+    another (e.g., a city may annex land, a tract may be split in two, a new
+    county may be created, etc.). The tables include data for a particular
+    geographic unit only at times when the unit's name or code was in use,
+    resulting in truncated time series for some areas.
+    
+    Users should be cautious when interpreting changes in nominally integrated
+    time series because a single unit code may refer to distinctly different
+    areas at different times. If you are uncertain whether any boundaries
+    changed in your areas of interest, we recommend inspecting NHGIS GIS files
+    to confirm. (NHGIS supplies GIS boundary files for all units and years in
+    nominally integrated time series *except* 1970 places and county
+    subdivisions.)
+    
+    Alternatively, for some topics and time periods, NHGIS provides
+    "geographically standardized" time series, which provide data from multiple
+    times for a single census's geographic units (e.g., 2000 and 2010 data for
+    2010 census units). A disadvantage of standardized time series is that, in
+    areas where source units do not nest perfectly within a unit of the standard
+    year (e.g., where a source 2000 unit intersects multiple 2010 units), NHGIS
+    applies interpolation to standardize the data, a process which may
+    occasionally produce substantial errors.
+
+Complete documentation on time series integration methods is available at:
+    https://www.nhgis.org/documentation/time-series
+ 
+--------------------------------------------------------------------------------
+Source Data
+--------------------------------------------------------------------------------
+ 
+Additional documentation on NHGIS data sources is available at:
+    https://www.nhgis.org/documentation/tabular-data
+
+Table 1: (B84) Persons 16 Years and Over by Labor Force and Employment Status [6]
+ 
+    Time series AA: Persons: 16 years and over ~ In labor force
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23001] Male >> In armed forces
+                        Variable: [C23002] Male >> In labor force: Employed
+                        Variable: [C23003] Male >> In labor force: Unemployed
+                        Variable: [C23010] Female >> In armed forces
+                        Variable: [C23011] Female >> In labor force: Employed
+                        Variable: [C23012] Female >> In labor force: Unemployed
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX001] Male >> Labor force: Armed forces
+                        Variable: [DHX002] Male >> Labor force: Civilian labor force: Employed
+                        Variable: [DHX003] Male >> Labor force: Civilian labor force: Unemployed
+                        Variable: [DHX005] Female >> Labor force: Armed forces
+                        Variable: [DHX006] Female >> Labor force: Civilian labor force: Employed
+                        Variable: [DHX007] Female >> Labor force: Civilian labor force: Unemployed
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I001] Male >> In labor force: In Armed Forces
+                        Variable: [E4I002] Male >> In labor force: Civilian: Employed
+                        Variable: [E4I003] Male >> In labor force: Civilian: Unemployed
+                        Variable: [E4I005] Female >> In labor force: In Armed Forces
+                        Variable: [E4I006] Female >> In labor force: Civilian: Employed
+                        Variable: [E4I007] Female >> In labor force: Civilian: Unemployed
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043C. Population 16 Years and Over by Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [GLP001] Male >> In labor force
+                        Variable: [GLP003] Female >> In labor force
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS002] In labor force
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3002] In labor force
+ 
+    Time series AB: Persons: 16 years and over ~ In labor force--In Armed Forces
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23001] Male >> In armed forces
+                        Variable: [C23010] Female >> In armed forces
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX001] Male >> Labor force: Armed forces
+                        Variable: [DHX005] Female >> Labor force: Armed forces
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I001] Male >> In labor force: In Armed Forces
+                        Variable: [E4I005] Female >> In labor force: In Armed Forces
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043D. Population 16 Years and Over by Sex by Armed Forces Status
+                    Universe: Persons 16 Years and Over in Labor Force
+                        Variable: [GLQ001] Male >> In Armed Forces
+                        Variable: [GLQ003] Female >> In Armed Forces
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS006] In labor force: Armed Forces
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3006] In labor force: Armed Forces
+ 
+    Time series AC: Persons: 16 years and over ~ In labor force--Civilian
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23002] Male >> In labor force: Employed
+                        Variable: [C23003] Male >> In labor force: Unemployed
+                        Variable: [C23011] Female >> In labor force: Employed
+                        Variable: [C23012] Female >> In labor force: Unemployed
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX002] Male >> Labor force: Civilian labor force: Employed
+                        Variable: [DHX003] Male >> Labor force: Civilian labor force: Unemployed
+                        Variable: [DHX006] Female >> Labor force: Civilian labor force: Employed
+                        Variable: [DHX007] Female >> Labor force: Civilian labor force: Unemployed
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I002] Male >> In labor force: Civilian: Employed
+                        Variable: [E4I003] Male >> In labor force: Civilian: Unemployed
+                        Variable: [E4I006] Female >> In labor force: Civilian: Employed
+                        Variable: [E4I007] Female >> In labor force: Civilian: Unemployed
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043D. Population 16 Years and Over by Sex by Armed Forces Status
+                    Universe: Persons 16 Years and Over in Labor Force
+                        Variable: [GLQ002] Male >> Civilian
+                        Variable: [GLQ004] Female >> Civilian
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS003] In labor force: Civilian labor force
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3003] In labor force: Civilian labor force
+ 
+    Time series AD: Persons: 16 years and over ~ In labor force--Civilian--Employed
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23002] Male >> In labor force: Employed
+                        Variable: [C23011] Female >> In labor force: Employed
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX002] Male >> Labor force: Civilian labor force: Employed
+                        Variable: [DHX006] Female >> Labor force: Civilian labor force: Employed
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I002] Male >> In labor force: Civilian: Employed
+                        Variable: [E4I006] Female >> In labor force: Civilian: Employed
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043E. Population 16 Years and Over by Sex by Employment Status
+                    Universe: Civilian Persons 16 Years and Over in Labor Force
+                        Variable: [GLR001] Male >> Employed
+                        Variable: [GLR003] Female >> Employed
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS004] In labor force: Civilian labor force: Employed
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3004] In labor force: Civilian labor force: Employed
+ 
+    Time series AE: Persons: 16 years and over ~ In labor force--Civilian--Unemployed
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23003] Male >> In labor force: Unemployed
+                        Variable: [C23012] Female >> In labor force: Unemployed
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX003] Male >> Labor force: Civilian labor force: Unemployed
+                        Variable: [DHX007] Female >> Labor force: Civilian labor force: Unemployed
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I003] Male >> In labor force: Civilian: Unemployed
+                        Variable: [E4I007] Female >> In labor force: Civilian: Unemployed
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043E. Population 16 Years and Over by Sex by Employment Status
+                    Universe: Civilian Persons 16 Years and Over in Labor Force
+                        Variable: [GLR002] Male >> Unemployed
+                        Variable: [GLR004] Female >> Unemployed
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS005] In labor force: Civilian labor force: Unemployed
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3005] In labor force: Civilian labor force: Unemployed
+ 
+    Time series AF: Persons: 16 years and over ~ Not in labor force
+        Year: 1970
+            Source dataset: 1970 Census: Count 4Pb - Sample-Based Population Data with Race/Ethnicity Breakdown
+                Source table: NT54. Sex by Labor Force Status and Selected Characteristics
+                    Universe: Persons 16 Years and Over
+                        Variable: [C23004] Male >> Not in labor force: Under 65: Inmate
+                        Variable: [C23005] Male >> Not in labor force: Under 65: Enrolled in school
+                        Variable: [C23006] Male >> Not in labor force: Under 65: Other
+                        Variable: [C23007] Male >> Not in labor force: 65 and over: Inmate
+                        Variable: [C23008] Male >> Not in labor force: 65 and over: Enrolled in school
+                        Variable: [C23009] Male >> Not in labor force: 65 and over: Other
+                        Variable: [C23013] Female >> Not in labor force: Under 65: Inmate
+                        Variable: [C23014] Female >> Not in labor force: Under 65: Enrolled in school
+                        Variable: [C23015] Female >> Not in labor force: Under 65: Other
+                        Variable: [C23016] Female >> Not in labor force: 65 and over: Inmate
+                        Variable: [C23017] Female >> Not in labor force: 65 and over: Enrolled in school
+                        Variable: [C23018] Female >> Not in labor force: 65 and over: Other
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT55A. Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [DHX004] Male >> Not in labor force
+                        Variable: [DHX008] Female >> Not in labor force
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP70. Sex by Employment Status
+                    Universe: Persons 16 years and over
+                        Variable: [E4I004] Male >> In labor force: Civilian: Not in labor force
+                        Variable: [E4I008] Female >> In labor force: Civilian: Not in labor force
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP043C. Population 16 Years and Over by Sex by Labor Force Status
+                    Universe: Persons 16 Years and Over
+                        Variable: [GLP002] Male >> Not in labor force
+                        Variable: [GLP004] Female >> Not in labor force
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [QXS007] Not in labor force
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B23025. Employment Status for the Population 16 Years and Over
+                    Universe: Population 16 years and over
+                        Variable: [ALY3007] Not in labor force
+ 
+ 
+Table 2: (C50) Commuters by Travel Time to Work [8]
+ 
+    Time series AA: Persons: Worker ~ 16 years and over ~ Did not work from home ~ Less than 5 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE001] Less than 5 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W001] Did not work at home: Less than 5 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD001] Less than 5 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH002] Less than 5 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3002] Less than 5 minutes
+ 
+    Time series AB: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 5 to 9 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE002] 5-9 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W002] Did not work at home: 5 to 9 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD002] 5 to 9 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH003] 5 to 9 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3003] 5 to 9 minutes
+ 
+    Time series AC: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 10 to 14 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE003] 10-14 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W003] Did not work at home: 10 to 14 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD003] 10 to 14 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH004] 10 to 14 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3004] 10 to 14 minutes
+ 
+    Time series AD: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 15 to 19 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE004] 15-19 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W004] Did not work at home: 15 to 19 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD004] 15 to 19 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH005] 15 to 19 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3005] 15 to 19 minutes
+ 
+    Time series AE: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 20 to 29 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE005] 20-29 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W005] Did not work at home: 20 to 24 minutes
+                        Variable: [E3W006] Did not work at home: 25 to 29 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD005] 20 to 24 minutes
+                        Variable: [GKD006] 25 to 29 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH006] 20 to 24 minutes
+                        Variable: [QTH007] 25 to 29 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3006] 20 to 24 minutes
+                        Variable: [ALU3007] 25 to 29 minutes
+ 
+    Time series AF: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 30 to 44 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE006] 30-44 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W007] Did not work at home: 30 to 34 minutes
+                        Variable: [E3W008] Did not work at home: 35 to 39 minutes
+                        Variable: [E3W009] Did not work at home: 40 to 44 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD007] 30 to 34 minutes
+                        Variable: [GKD008] 35 to 39 minutes
+                        Variable: [GKD009] 40 to 44 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH008] 30 to 34 minutes
+                        Variable: [QTH009] 35 to 39 minutes
+                        Variable: [QTH010] 40 to 44 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3008] 30 to 34 minutes
+                        Variable: [ALU3009] 35 to 39 minutes
+                        Variable: [ALU3010] 40 to 44 minutes
+ 
+    Time series AG: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 45 to 59 minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE007] 45-59 minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W010] Did not work at home: 45 to 59 minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD010] 45 to 59 minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH011] 45 to 59 minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3011] 45 to 59 minutes
+ 
+    Time series AH: Persons: Worker ~ 16 years and over ~ Did not work from home ~ 60 or more minutes
+        Year: 1980
+            Source dataset: 1980 Census: STF 3 - Sample-Based Data
+                Source table: NT41. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [DHE008] 60 or more minutes
+        Year: 1990
+            Source dataset: 1990 Census: STF 3 - Sample-Based Data
+                Source table: NP50. Travel Time to Work
+                    Universe: Workers 16 years and over
+                        Variable: [E3W011] Did not work at home: 60 to 89 minutes
+                        Variable: [E3W012] Did not work at home: 90 or more minutes
+        Year: 2000
+            Source dataset: 2000 Census: SF 3a - Sample-Based Data [Areas Larger Than Block Groups]
+                Source table: NP031B. Travel Time to Work
+                    Universe: Workers 16 Years and Over Who Did Not Work at Home
+                        Variable: [GKD011] 60 to 89 minutes
+                        Variable: [GKD012] 90 or more minutes
+        Year: 2008-2012
+            Source dataset: 2012 American Community Survey: 5-Year Data [2008-2012, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work at home
+                        Variable: [QTH012] 60 to 89 minutes
+                        Variable: [QTH013] 90 or more minutes
+        Year: 2015-2019
+            Source dataset: 2019 American Community Survey: 5-Year Data [2015-2019, Block Groups & Larger Areas]
+                Source table: B08303. Travel Time to Work
+                    Universe: Workers 16 years and over who did not work from home
+                        Variable: [ALU3012] 60 to 89 minutes
+                        Variable: [ALU3013] 90 or more minutes
+ 
+--------------------------------------------------------------------------------
+Citation and Use of NHGIS Data
+--------------------------------------------------------------------------------
+ 
+All persons are granted a limited license to use this documentation and the
+accompanying data, subject to the following conditions:
+
+* REDISTRIBUTION: You will not redistribute the data without permission.
+
+  You may publish a subset of the data to meet journal requirements for accessing 
+  data related to a particular publication. Contact us for permission for any other 
+  redistribution; we will consider requests for free and commercial redistribution.
+
+* CITATION: You will cite NHGIS appropriately.
+
+    * Publications and research reports employing NHGIS data (either tabular or GIS) 
+      should include the following citation:
+
+        Steven Manson, Jonathan Schroeder, David Van Riper, Tracy Kugler, and Steven Ruggles. 
+        IPUMS National Historical Geographic Information System: Version 16.0 
+        [dataset]. Minneapolis, MN: IPUMS. 2021. 
+        http://doi.org/10.18128/D050.V16.0
+
+    * For policy briefs, online resources, or articles in the popular press, we 
+      recommend that you cite the use of NHGIS data as follows:
+
+        IPUMS NHGIS, University of Minnesota, www.nhgis.org.
+
+These terms of use are a legally binding agreement. You can use the data only in 
+accordance with these terms, and any other use is a violation of the agreement. 
+Violations may result in revocation of the agreement and prohibition from using other 
+IPUMS data. If IPUMS or our partners are harmed from your violation, you are 
+responsible for all damages, including reasonable attorney's fees and expenses.
+        
+In addition, we request that users send us a copy of any publications, research
+reports, or educational material making use of the data or documentation.
+
+Send electronic material to: nhgis@umn.edu
+
+Printed matter should be sent to:
+
+    IPUMS NHGIS
+    Institute for Social Research and Data Innovation
+    University of Minnesota
+    50 Willey Hall
+    225 19th Ave S
+    Minneapolis, MN 55455
