@@ -477,20 +477,21 @@ cbsa_10year_poverty %>% filter(grepl("MO", NAME) & grepl("Metro Area", NAME)) %>
 ```
 # Education
 
-#Note: Inconsistent variables (refer to profile series)
-2011-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
-            DP02_0067P: Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+#Note: Inconsistent variables (refer to profile series) (profile variables)
+2011-2018: DP02_0067: Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher
+            DP02_0067P: Percent Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree
 
-2019-2020: DP02_0068: Estimate!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
-           DP02_0068P:Percent!!EDUCATIONAL ATTAINMENT!!Percent bachelor's degree or higher
+2019-2020: DP02_0068: Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher
+           DP02_0068P:Percent!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree or higher
 
 ```{r}
-years <- c(2011:2018)
+years <- c(2010:2018)
 
 education1 <- map_dfr(years, function(year) {
   get_acs(
     geography = "place",
-    variables = c(percent = "DP02_0067P"),
+    variables = c(percent = "DP02_0067P",
+                  estimate = "DP02_0067"),
     state = "MO",
     year = year
   ) %>% mutate(year = year)
@@ -503,7 +504,8 @@ year1 <- c(2019:2020)
 education2 <- map_dfr(year1, function(year) {
   get_acs(
     geography = "place",
-    variables = c(percent = "DP02_0068P"),
+    variables = c(percent = "DP02_0068P",
+                  estimate = "DP02_0068"),
     state = "MO",
     year = year
   ) %>% mutate(year = year)
